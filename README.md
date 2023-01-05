@@ -1,7 +1,7 @@
 # 👼 Angel NFT Project 👼
 **This is a web3 projects for donations and NFT Mining.**
 
-We are creating a website that allows donors to mint NFTs of random angel images and exchange NFTs that have been minted.
+We are creating a website that allows donators to mint NFTs of random angel images and exchange NFTs that have been minted.
 
 ## 🌈 Quick Start
 In each folder, execute the below command.

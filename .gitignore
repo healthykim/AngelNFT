@@ -1,0 +1,15 @@
+# vscode
+.vscode/
+
+# macOS
+.DS_Store
+
+# Hardhat
+contracts/cache/
+contracts/artifacts/
+
+# Dependency directory
+node_modules
+
+## logs
+*.log

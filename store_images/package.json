@@ -1,0 +1,17 @@
+{
+  "name": "store_images",
+  "version": "1.0.0",
+  "main": "store_images.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "files-from-path": "^0.2.6",
+    "fs": "^0.0.1-security",
+    "nft.storage": "^7.0.0"
+  },
+  "description": ""
+}

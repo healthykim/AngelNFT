@@ -104,13 +104,13 @@ TODO : make this random
 ### mint
 
 ```solidity
-function mint() public returns (uint16 tokenId)
+function mint(address sender) public returns (uint16 tokenId)
 ```
 
 _Mint NFT and Return minted token Id.
 
 Usage 
-- AngelTokenContract.methods.mint().send({ from: `account` })_
+- AngelTokenContract.methods.mint(`account`).send({ from: `account` })_
 
 ### setExchangeableToken
 
@@ -244,6 +244,111 @@ function supportsInterface(bytes4 interfaceId) public view returns (bool)
 
 _See {@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol}_
 
+## Donate
+
+Use this contract for donating/managing donation info.
+
+### angelToken
+
+```solidity
+contract AngelToken angelToken
+```
+
+### destinations
+
+```solidity
+struct Donate.DestinationInfo[] destinations
+```
+
+Usage
+- AngelTokenContract.methods.destinations(`destinationId`).call()
+
+### numOfDonate
+
+```solidity
+mapping(address => uint256) numOfDonate
+```
+
+### DonateInfo
+
+```solidity
+struct DonateInfo {
+  address donator;
+  uint32 timeStamp;
+  uint256 amount;
+  uint16 destinationId;
+}
+```
+
+### DestinationInfo
+
+```solidity
+struct DestinationInfo {
+  address walletAddress;
+  string name;
+}
+```
+
+### constructor
+
+```solidity
+constructor(address angelTokenAddress) public
+```
+
+### donateInfoList
+
+```solidity
+struct Donate.DonateInfo[] donateInfoList
+```
+
+Usage
+- AngelTokenContract.methods.donateInfoList(`donateId`).call()
+
+### DONATE
+
+```solidity
+event DONATE(address from, address to, uint256 amount)
+```
+
+### addDestination
+
+```solidity
+function addDestination(address _destination, string name) public
+```
+
+_Add destination to destination list.
+
+Usage
+- AngelTokenContract.methods.addDestination(`_destination`, `name`).send()
+
+Requirements
+- `caller` should be owner(deployer) of `Donate` contract._
+
+### donate
+
+```solidity
+function donate(uint256 destinationId) public payable returns (uint16 tokenId)
+```
+
+_Donate money to `destinationId` and return NFT tokenId.
+
+Usage
+- AngelTokenContract.methods.donate(`destinationId`).send({ from: `account` })
+
+Requirements
+- `destinationId` must exist in destinations._
+
+### getDonateHistory
+
+```solidity
+function getDonateHistory(address donator) external view returns (struct Donate.DonateInfo[])
+```
+
+_Return donate history by `donator`.
+
+Usage
+- AngelTokenContract.methods.getDonateHistory(`donator`).call()_
+
 ## MockedAngelToken
 
 DO NOT use this contract in frontend! Use this only for testing.
@@ -252,37 +357,5 @@ DO NOT use this contract in frontend! Use this only for testing.
 
 ```solidity
 function mockTotalTokens(uint16 mockedTokenAmount) public
-```
-
-## Lock
-
-### unlockTime
-
-```solidity
-uint256 unlockTime
-```
-
-### owner
-
-```solidity
-address payable owner
-```
-
-### Withdrawal
-
-```solidity
-event Withdrawal(uint256 amount, uint256 when)
-```
-
-### constructor
-
-```solidity
-constructor(uint256 _unlockTime) public payable
-```
-
-### withdraw
-
-```solidity
-function withdraw() public
 ```
 

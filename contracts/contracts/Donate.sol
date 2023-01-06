@@ -8,6 +8,10 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 /// @notice Use this contract for donating/managing donation info.
 contract Donate is Ownable {
     AngelToken public angelToken;
+    /** 
+     * Usage
+     * - AngelTokenContract.methods.destinations(`destinationId`).call()
+     */
     DestinationInfo[] public destinations;
     mapping(address => uint) public numOfDonate;
 
@@ -27,14 +31,36 @@ contract Donate is Ownable {
         angelToken = AngelToken(angelTokenAddress);
     }
 
+    /** 
+     * Usage
+     * - AngelTokenContract.methods.donateInfoList(`donateId`).call()
+     */
     DonateInfo[] public donateInfoList;
 
     event DONATE(address from, address to, uint amount);
 
+    /**
+     * @dev Add destination to destination list.
+     * 
+     * Usage
+     * - AngelTokenContract.methods.addDestination(`_destination`, `name`).send()
+     *
+     * Requirements
+     * - `caller` should be owner(deployer) of `Donate` contract.
+     */
     function addDestination(address _destination, string memory name) public onlyOwner {
         destinations.push(DestinationInfo(_destination, name));
     }
 
+    /**
+     * @dev Donate money to `destinationId` and return NFT tokenId.
+     * 
+     * Usage
+     * - AngelTokenContract.methods.donate(`destinationId`).send({ from: `account` })
+     *
+     * Requirements
+     * - `destinationId` must exist in destinations.
+     */
     function donate(uint destinationId) public payable returns(uint16 tokenId) {
         require(destinations.length > destinationId, "Invalid destination Id");
         payable(destinations[destinationId].walletAddress).transfer(msg.value);
@@ -47,6 +73,12 @@ contract Donate is Ownable {
         return tokenId;
     }
 
+    /**
+     * @dev Return donate history by `donator`.
+     * 
+     * Usage
+     * - AngelTokenContract.methods.getDonateHistory(`donator`).call()
+     */
     function getDonateHistory(address donator) external view returns(DonateInfo[] memory) {
         DonateInfo[] memory info = new DonateInfo[](numOfDonate[donator]);
         

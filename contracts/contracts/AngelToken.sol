@@ -61,15 +61,15 @@ contract AngelToken is ERC721Enumerable, ERC721URIStorage, Ownable {
      * @dev Mint NFT and Return minted token Id.
      *
      * Usage 
-     * - AngelTokenContract.methods.mint().send({ from: `account` })
+     * - AngelTokenContract.methods.mint(`account`).send({ from: `account` })
      */
-    function mint() public returns(uint16 tokenId) {
+    function mint(address sender) public returns(uint16 tokenId) {
         require(totalSupply()<totalTokens, "Ran out of token");
         tokenId = getNextTokenId();
         string memory metadataUri = string(abi.encodePacked(metadataBaseUri, Strings.toString(tokenId), ".json"));
-        _safeMint(msg.sender, tokenId);
+        _safeMint(sender, tokenId);
         _setTokenURI(tokenId, metadataUri);
-        emit MINT(msg.sender, tokenId, metadataUri);
+        emit MINT(sender, tokenId, metadataUri);
     }
 
 

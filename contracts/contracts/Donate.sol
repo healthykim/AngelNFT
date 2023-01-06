@@ -34,4 +34,16 @@ contract Donate is Ownable {
     function addDestination(address _destination, string memory name) public onlyOwner {
         destinations.push(DestinationInfo(_destination, name));
     }
+
+    function donate(uint destinationId) public payable returns(uint16 tokenId) {
+        require(destinations.length > destinationId, "Invalid destination Id");
+        payable(destinations[destinationId].walletAddress).transfer(msg.value);
+
+        donateInfoList.push(DonateInfo(msg.sender, uint32(block.timestamp), msg.value, uint16(destinationId)));
+        numOfDonate[msg.sender]++;
+
+        tokenId = angelToken.mint(msg.sender);
+        emit DONATE(msg.sender, destinations[destinationId].walletAddress, msg.value);
+        return tokenId;
+    }
 }

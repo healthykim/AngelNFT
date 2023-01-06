@@ -104,7 +104,11 @@ TODO : make this random
 ### mint
 
 ```solidity
+<<<<<<< HEAD
 function mint(address sender) external returns (uint16 tokenId)
+=======
+function mint(address sender) public returns (uint16 tokenId)
+>>>>>>> 060f6da (docs: Add comment for docs)
 ```
 
 _Mint NFT and Return minted token Id.

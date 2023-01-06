@@ -29,12 +29,12 @@ describe("AngelToken", function() {
         accounts = await ethers.getSigners();
     })
 
-    describe("setUriBase", function() {
-        it("should fail if caller is not owner", async function() {
+    describe("Set Base URI", function() {
+        it("Should fail if caller is not owner", async function() {
             await assertFailwithMessage(angelToken.connect(accounts[1]).setUriBase(baseUri), 
             "Ownable: caller is not the owner");
         })
-        it("should success if caller is owner", async function() {
+        it("Should success if caller is owner", async function() {
             assert(
                 await angelToken
                         .connect(accounts[0])
@@ -49,8 +49,8 @@ describe("AngelToken", function() {
             .setUriBase(baseUri);
         })
     
-        it("should mint NFT with right token data", async function() {
-            const mintTransaction = await angelToken.connect(accounts[1]).mint();
+        it("Should mint NFT with right token data", async function() {
+            const mintTransaction = await angelToken.connect(accounts[1]).mint(accounts[1].getAddress());
             const tokenId = mintTransaction.value;
             const tokenIdByOwner = await angelToken.tokenOfOwnerByIndex(await accounts[1].getAddress(), 0);
             const tokenUri = await angelToken.tokenURI(tokenId);
@@ -62,10 +62,10 @@ describe("AngelToken", function() {
             assert.exists(reciept.events?.find((e)=> e.event === 'MINT'), "Event not generated");
         })
 
-        it("should revert with the right error if there is no token left", async function() {
+        it("Should revert with the right error if there is no token left", async function() {
             await mockedAngelToken.connect(accounts[0]).mockTotalTokens(1);
-            await mockedAngelToken.connect(accounts[1]).mint();
-            await assertFailwithMessage(mockedAngelToken.connect(accounts[1]).mint(), "Ran out of token")
+            await mockedAngelToken.connect(accounts[1]).mint(accounts[1].getAddress());
+            await assertFailwithMessage(mockedAngelToken.connect(accounts[1]).mint(accounts[1].getAddress()), "Ran out of token")
         }) 
 
     })
@@ -75,14 +75,14 @@ describe("AngelToken", function() {
         let fromTokenId: any;
 
         beforeEach(async () => {
-            await angelToken.connect(accounts[1]).mint();
-            await angelToken.connect(accounts[2]).mint();
+            await angelToken.connect(accounts[1]).mint(accounts[1].getAddress());
+            await angelToken.connect(accounts[2]).mint(accounts[2].getAddress());
             fromTokenId = await angelToken.tokenOfOwnerByIndex(await accounts[1].getAddress(), 0);
             toTokenId = await angelToken.tokenOfOwnerByIndex(await accounts[2].getAddress(), 0);
             await angelToken.connect(accounts[2]).setExchangeableToken(toTokenId);
         })
 
-        describe("set exchangeable", function() {
+        describe("Set exchangeable", function() {
             it("should revert with the right error if token is already exchangable", async function() {
                 await assertFailwithMessage(angelToken.connect(accounts[2]).setExchangeableToken(toTokenId), "Already exchangeable.");                
             })
@@ -91,29 +91,29 @@ describe("AngelToken", function() {
             })
         })
 
-        describe("request", function () {
-            it("should revert with the right error if token does not exist", async function() {
+        describe("Request", function () {
+            it("Should revert with the right error if token does not exist", async function() {
                 await assertFailwithMessage(angelToken.connect(accounts[3]).requestExchange(3, toTokenId), "Token Id is not valid.");
                 await assertFailwithMessage(angelToken.connect(accounts[1]).requestExchange(fromTokenId, 3), "Token Id is not valid.");
                 await assertFailwithMessage(angelToken.connect(accounts[1]).requestExchange(3, 4), "Token Id is not valid.");
             })
     
-            it("should revert with the right error if caller is not the owner of 'from' token", async function() {
+            it("Should revert with the right error if caller is not the owner of 'from' token", async function() {
                 await assertFailwithMessage(angelToken.connect(accounts[1]).requestExchange(toTokenId, fromTokenId), "Only token owner can request exchange.");
             })
             
-            it("should revert with the right error if caller already have 'to' token", async function() { 
-                await angelToken.connect(accounts[1]).mint();
+            it("Should revert with the right error if caller already have 'to' token", async function() { 
+                await angelToken.connect(accounts[1]).mint(accounts[1].getAddress());
                 const fromTokenId2 = await angelToken.tokenOfOwnerByIndex(await accounts[1].getAddress(), 1);
                 await assertFailwithMessage(angelToken.connect(accounts[1]).requestExchange(fromTokenId, fromTokenId2), "Sender already has requested token.");
             })
 
-            it("should revert if caller already called this function", async function() {
+            it("Should revert if caller already called this function", async function() {
                 await angelToken.connect(accounts[1]).requestExchange(fromTokenId, toTokenId);
                 await assertFailwithMessage(angelToken.connect(accounts[1]).requestExchange(fromTokenId, toTokenId), "Cannot request exchange to the same token twice.");
             })
 
-            it("should put the offer to the 'exchangeRequested'(mapping type)", async function() {
+            it("Should put the offer to the 'exchangeRequested'(mapping type)", async function() {
                 const tx = await angelToken.connect(accounts[1]).requestExchange(fromTokenId, toTokenId);
                 
                 const requestTokenId = await angelToken.exchangeRequested(fromTokenId);
@@ -123,26 +123,26 @@ describe("AngelToken", function() {
                 assert.exists(reciept.events?.find((e)=> e.event === 'REQUEST'), "Wrong event")
             })
         })
-        describe("approve & exchange", function () {
+        describe("Approve & Exchange", function () {
             beforeEach(async () => {
                 await angelToken.connect(accounts[1]).requestExchange(fromTokenId, toTokenId);
             })
-            it("should revert with the right error if any of the tokens do not exist", async function() {
+            it("Should revert with the right error if any of the tokens do not exist", async function() {
                 await assertFailwithMessage(angelToken.connect(accounts[3]).approveExchange(3, toTokenId), "Token Id is not valid.");
                 await assertFailwithMessage(angelToken.connect(accounts[1]).approveExchange(fromTokenId, 3), "Token Id is not valid.");
                 await assertFailwithMessage(angelToken.connect(accounts[1]).approveExchange(3, 4), "Token Id is not valid.");
             })
     
-            it("should revert with the right error if caller is not the owner of 'to' token", async function() {
+            it("Should revert with the right error if caller is not the owner of 'to' token", async function() {
                 await assertFailwithMessage(angelToken.connect(accounts[1]).approveExchange(fromTokenId, toTokenId), "Only token owner can approve exchange.");
             })
     
-            it("should revert if caller is not approved to access 'from' token", async function() {
+            it("Should revert if caller is not approved to access 'from' token", async function() {
                 await angelToken.connect(accounts[1]).approve(await accounts[3].getAddress(), fromTokenId);
                 await assertFailwithMessage(angelToken.connect(accounts[2]).approveExchange(fromTokenId, toTokenId), "Approval rejected by requesting side.");
             })
 
-            it("sholud exchange 'to' token and 'from' token", async function() {
+            it("Sholud exchange 'to' token and 'from' token", async function() {
                 const tx = await angelToken.connect(accounts[2]).approveExchange(fromTokenId, toTokenId);
 
                 assert.equal(await angelToken.ownerOf(fromTokenId), await accounts[2].getAddress())

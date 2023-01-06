@@ -46,4 +46,21 @@ contract Donate is Ownable {
         emit DONATE(msg.sender, destinations[destinationId].walletAddress, msg.value);
         return tokenId;
     }
+
+    function getDonateHistory(address donator) external view returns(DonateInfo[] memory) {
+        DonateInfo[] memory info = new DonateInfo[](numOfDonate[donator]);
+        
+        uint counter = 0;
+        for(uint i=0; i<donateInfoList.length; i++) {
+            if(donateInfoList[i].donator == donator) {
+                info[counter].donator = donateInfoList[i].donator;
+                info[counter].timeStamp = donateInfoList[i].timeStamp;
+                info[counter].amount = donateInfoList[i].amount;
+                info[counter].destinationId = donateInfoList[i].destinationId;
+                counter++;
+            }
+        }
+
+        return info;
+    }
 }

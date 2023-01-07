@@ -13,6 +13,3 @@ node_modules
 
 ## logs
 *.log
-
-## localhost contract address
-frontend/src/contracts/index.js

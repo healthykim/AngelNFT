@@ -1,28 +1,28 @@
 import React from 'react';
-import { Stack, Flex, Box, Text, Button, Link } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 
 
-function Layout({children}) {
-    return(
-    <Stack direction='column' alignItems={"center"} spacing={4}>
-        <Flex w='full' p={4} bg={'skyblue'} direction='column' alignItems={"center"} >
-        <Link href = "/">
-            <Text fontWeight={"bold"}>Project Name</Text>
-        </Link>
-        </Flex>
-        <Flex direction = "column" h = "full" justifyContent={"center"} alignItems="center">
-            {children}
-        </Flex>
-        {/*
-        <Flex justifyContent='space-around' alignItems={"center"}>
-            <Link href = "/donate">
-                <Button size="sm" colorScheme = "blue">
-                    Donate Page
-                </Button>
-            </Link>
-        </Flex>
-        */}
-    </Stack>
+function Layout({ children }) {
+    return (
+        <div className='w-ful'>
+            <div className='fixed w-full backdrop-blur'>
+                <nav class="flex h-16 justify-between items-center px-12">
+                    <div class="flex items-center">
+                        <Link to="/" class="text-black font-bold text-xl mr-4">Angel NFT</Link>
+                        <Link to="/donate" class="text-black mr-4">Donate</Link>
+                        <Link to="/trade" class="text-black mr-4">Trade</Link>
+                    </div>
+                    <div class="flex items-center">
+                        <div className='w-8 h-8 rounded-full bg-black'>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            {/* <div className='h-16 bg-ukblue'></div> */}
+            <div className='flex-col w-full h-full justify-center items-center'>
+                {children}
+            </div>
+        </div>
     );
 }
 

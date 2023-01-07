@@ -11,5 +11,8 @@ contracts/artifacts/
 # Dependency directory
 node_modules
 
+# Frontend
+frontend/src/contracts/index.js
+
 ## logs
 *.log

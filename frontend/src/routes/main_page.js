@@ -31,6 +31,7 @@ function MainPage() {
                 UI가 구리다. 이건 준규의 도움이 필요해<br />
                 아무튼 아래 버튼을 눌러서 시작!<br />
             </Text>
+            <h1 className="text-3xl font-bold underline">hi</h1>
             <Link href="/donate">
                 <Button mt={10}>Start: {nextTokenId}</Button>
             </Link>

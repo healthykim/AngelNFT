@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import {Flex, Text, Button, Alert, AlertIcon} from '@chakra-ui/react'
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -8,20 +7,20 @@ function DonatePage() {
     const [account, setAccount] = useState("");
     const [donated, setDonated] = useState(false)
     const [showAlert, setShowAlert] = useState(false)
-    
+
     const getAccount = async () => {
-        try{
-            if(window.ethereum) {
-            const accounts = await window.ethereum.request({
-                method: 'eth_requestAccounts',
-            });
-            setAccount(accounts[0]);
+        try {
+            if (window.ethereum) {
+                const accounts = await window.ethereum.request({
+                    method: 'eth_requestAccounts',
+                });
+                setAccount(accounts[0]);
             }
             else {
-            alert("Install Metamask!");
+                alert("Install Metamask!");
             }
         }
-        catch (error){
+        catch (error) {
             console.error(error);
         }
     }
@@ -40,33 +39,35 @@ function DonatePage() {
         }
     };
 
-    useEffect(() => {getAccount();}, [])
+    useEffect(() => { getAccount(); }, [])
     useEffect(() => {
-        const timer = setTimeout(()=>{ setShowAlert(false) }, 1000);
+        const timer = setTimeout(() => { setShowAlert(false) }, 2000);
         return () => clearTimeout(timer);
     }, [showAlert])
 
-    return(
+    return (
         <>
-            <Flex p={10} direction='column' alignItems={"center"} >
-                <Text>
+            <div className="h-16"></div>
+            <div className="flex-col items-center text-center p-10">
+                <p>
                     대충 지갑 연결하고 서명하는것 설명<br />
-                </Text>
+                </p>
                 {/*TODO: 페이지 이동 -> 팝업*/}
-                <Button mt={10} onClick={onClickMint}>Donate</Button>
+                <button onClick={onClickMint} className="mt-10 cursor-pointer bg-gray-300 px-4 py-2 rounded-lg">
+                    Donate
+                </button>
+                <br />
                 {
-                    donated ?
+                    donated &&
                     <Link to="/show_NFT" state={{ tokenId: "angelKim" }}>
-                        <Button mt={10}>See my NFT</Button>
-                    </Link> : null
+                        <button className="mt-10 cursor-pointer bg-gray-300 px-4 py-2 rounded-lg">See my NFT</button>
+                    </Link>
                 }
-            </Flex>
-
-            {showAlert ? (  
-                <Alert status='error'>
-                    <AlertIcon />
+            </div>
+            {showAlert ? (
+                <div className="bg-red-300 p-4 font-medium">
                     Connect Metamask Wallet!
-                </Alert>
+                </div>
             ) : null}
         </>
     );

@@ -853,5 +853,6 @@ export const DonateContract = new web3.eth.Contract(
 );
 
 
-export const ipfsImageHash = "bafybeib3epzqp3u5p36riiqibf7oprpwmw7psdmbedi3imy3tnwj3y3hne"
+export const ipfsImageHash = "bafybeigk7nzlkdjyv7d4sszx4ibmrn63vyvt7d5kgrlyrk7os7p2x6apti"
+export const jsonHash = "bafybeifa7pxr5dkqtfqn3yycj5cjd6d5qkddgnnogzlckinre6zuxbkeze"
 ///TODO : 연결방법 다른것도 있는지 찾아보기

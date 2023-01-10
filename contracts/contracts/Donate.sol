@@ -9,7 +9,7 @@ contract Donate is Ownable {
     AngelToken public angelToken;
     /** 
      * Usage
-     * - AngelTokenContract.methods.destinations(`destinationId`).call()
+     * - DonateContract.methods.destinations(`destinationId`).call()
      */
     DestinationInfo[] public destinations;
     mapping(address => uint) public numOfDonate;
@@ -32,7 +32,7 @@ contract Donate is Ownable {
 
     /** 
      * Usage
-     * - AngelTokenContract.methods.donateInfoList(`donateId`).call()
+     * - DonateContract.methods.donateInfoList(`donateId`).call()
      */
     DonateInfo[] public donateInfoList;
 
@@ -42,7 +42,7 @@ contract Donate is Ownable {
      * @dev Add destination to destination list.
      * 
      * Usage
-     * - AngelTokenContract.methods.addDestination(`_destination`, `name`).send()
+     * - DonateContract.methods.addDestination(`_destination`, `name`).send()
      *
      * Requirements
      * - `caller` should be owner(deployer) of `Donate` contract.
@@ -55,7 +55,7 @@ contract Donate is Ownable {
      * @dev Donate money to `destinationId` and return NFT tokenId.
      * 
      * Usage
-     * - AngelTokenContract.methods.donate(`destinationId`).send({ from: `account` })
+     * - DonateContract.methods.donate(`destinationId`).send({ from: `account` })
      *
      * Requirements
      * - `destinationId` must exist in destinations.
@@ -76,7 +76,7 @@ contract Donate is Ownable {
      * @dev Return donate history by `donator`.
      * 
      * Usage
-     * - AngelTokenContract.methods.getDonateHistory(`donator`).call()
+     * - DonateContract.methods.getDonateHistory(`donator`).call()
      */
     function getDonateHistory(address donator) external view returns(DonateInfo[] memory) {
         DonateInfo[] memory info = new DonateInfo[](numOfDonate[donator]);

@@ -94,4 +94,14 @@ contract Donate is Ownable {
 
         return info;
     }
+
+    /**
+     * @dev Return `destinations` array.
+     * 
+     * Usage
+     * - DonateContract.methods.getDestinations().call()
+     */
+    function getDestinations() external view returns(DestinationInfo[] memory) {
+        return destinations;
+    }
 }

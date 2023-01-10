@@ -46,11 +46,11 @@ describe("Donate", function() {
 
     describe("Make donation", async function() {
         it("Should revert if the destination Id is not valid", async function() {
-            await assertFailwithMessage(donateContract.connect(accounts[1]).donate(0), "Invalid destination Id");
+            await assertFailwithMessage(donateContract.connect(accounts[1]).donate(0, false), "Invalid destination Id");
         })
         it("Should transfer money and mint NFT", async function() {
             await donateContract.connect(accounts[0]).addDestination(accounts[1].getAddress(), '');
-            const tx = await donateContract.connect(accounts[2]).donate(0);
+            const tx = await donateContract.connect(accounts[2]).donate(0, true);
 
             const recipt = await tx.wait();
             assert(recipt.events?.find((e)=> e.event === 'DONATE'), "No DONATE event");
@@ -60,9 +60,9 @@ describe("Donate", function() {
     describe("Get donation history", async function() {
         it("Should return right donation history", async function() {
             await donateContract.connect(accounts[0]).addDestination(accounts[1].getAddress(), '');
-            await donateContract.connect(accounts[2]).donate(0);
-            await donateContract.connect(accounts[2]).donate(0);
-            await donateContract.connect(accounts[2]).donate(0);
+            await donateContract.connect(accounts[2]).donate(0, false);
+            await donateContract.connect(accounts[2]).donate(0, true);
+            await donateContract.connect(accounts[2]).donate(0, false);
             const result = await donateContract.getDonateHistory(accounts[2].getAddress());
             
             assert.equal(result.length, 3, "Wrong history length");

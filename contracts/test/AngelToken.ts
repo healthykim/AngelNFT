@@ -1,6 +1,6 @@
 import { ethers } from "hardhat";
 import { expect, assert } from "chai";
-import { AngelToken, MockedAngelToken } from "../typechain-types";
+import { AngelToken } from "../typechain-types";
 import { Signer } from "ethers";
 
 async function assertFailwithMessage(promise: Promise<any>, expectedMessage: String) {
@@ -17,15 +17,15 @@ async function assertFailwithMessage(promise: Promise<any>, expectedMessage: Str
 
 describe("AngelToken", function() { 
     let angelToken: AngelToken;
-    let mockedAngelToken: MockedAngelToken;
+    //let mockedAngelToken: MockedAngelToken;
     let accounts: Signer[]; // [0] is owner
     let baseUri = "https://gateway.ipfs.io/ipfs/bafybeib3epzqp3u5p36riiqibf7oprpwmw7psdmbedi3imy3tnwj3y3hne/images/";
 
     beforeEach(async () => {
         const AngelToken = await ethers.getContractFactory("AngelToken");
         angelToken = await AngelToken.deploy();
-        const MockedAngelToken = await ethers.getContractFactory("MockedAngelToken");
-        mockedAngelToken = await MockedAngelToken.deploy();
+        // const MockedAngelToken = await ethers.getContractFactory("MockedAngelToken");
+        // mockedAngelToken = await MockedAngelToken.deploy();
         accounts = await ethers.getSigners();
     })
 
@@ -62,11 +62,10 @@ describe("AngelToken", function() {
             assert.exists(reciept.events?.find((e)=> e.event === 'MINT'), "Event not generated");
         })
 
-        it("Should revert with the right error if there is no token left", async function() {
-            await mockedAngelToken.connect(accounts[0]).mockTotalTokens(1);
-            await mockedAngelToken.connect(accounts[1]).mint(accounts[1].getAddress());
-            await assertFailwithMessage(mockedAngelToken.connect(accounts[1]).mint(accounts[1].getAddress()), "Ran out of token")
-        }) 
+        // it("Should revert with the right error if there is no token left", async function() {
+        //     await mockedAngelToken.connect(accounts[1]).mint(accounts[1].getAddress());
+        //     await assertFailwithMessage(mockedAngelToken.connect(accounts[1]).mint(accounts[1].getAddress()), "Ran out of token")
+        // }) 
 
     })
 

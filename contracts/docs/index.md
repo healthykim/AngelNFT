@@ -49,7 +49,7 @@ uint16 exchangeableTokenAmount
 ### MINT
 
 ```solidity
-event MINT(address owner, uint256 tokenId, string uri)
+event MINT(address owner, uint256 tokenId)
 ```
 
 ### REQUEST
@@ -104,7 +104,7 @@ TODO : make this random
 ### mint
 
 ```solidity
-function mint(address sender) public returns (uint16 tokenId)
+function mint(address sender) external returns (uint16 tokenId)
 ```
 
 _Mint NFT and Return minted token Id.
@@ -212,37 +212,13 @@ _Return list of TokenData owned by `owner`
 Usage 
 - AngelTokenContract.methods.getTokenDataOfOwner(`tokenId`).call()_
 
-### _beforeTokenTransfer
-
-```solidity
-function _beforeTokenTransfer(address from, address to, uint256 tokenId, uint256 batchSize) internal
-```
-
-_See {@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol}_
-
-### _burn
-
-```solidity
-function _burn(uint256 tokenId) internal
-```
-
-_See {@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol}_
-
 ### tokenURI
 
 ```solidity
 function tokenURI(uint256 tokenId) public view returns (string)
 ```
 
-_See {@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol}_
-
-### supportsInterface
-
-```solidity
-function supportsInterface(bytes4 interfaceId) public view returns (bool)
-```
-
-_See {@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol}_
+_See {IERC721Metadata-tokenURI}._
 
 ## Donate
 
@@ -273,10 +249,10 @@ mapping(address => uint256) numOfDonate
 
 ```solidity
 struct DonateInfo {
+  uint40 destinationId;
+  uint56 timeStamp;
   address donator;
-  uint32 timeStamp;
   uint256 amount;
-  uint16 destinationId;
 }
 ```
 
@@ -348,14 +324,4 @@ _Return donate history by `donator`.
 
 Usage
 - AngelTokenContract.methods.getDonateHistory(`donator`).call()_
-
-## MockedAngelToken
-
-DO NOT use this contract in frontend! Use this only for testing.
-
-### mockTotalTokens
-
-```solidity
-function mockTotalTokens(uint16 mockedTokenAmount) public
-```
 

@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 import "./AngelToken.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
 
 /// @title Donating & managing donation info contract
 /// @author AngelKim
@@ -16,10 +15,10 @@ contract Donate is Ownable {
     mapping(address => uint) public numOfDonate;
 
     struct DonateInfo {
+        uint40 destinationId;
+        uint56 timeStamp;
         address donator;
-        uint32 timeStamp;
         uint256 amount;
-        uint16 destinationId;
     }
 
     struct DestinationInfo {
@@ -65,7 +64,7 @@ contract Donate is Ownable {
         require(destinations.length > destinationId, "Invalid destination Id");
         payable(destinations[destinationId].walletAddress).transfer(msg.value);
 
-        donateInfoList.push(DonateInfo(msg.sender, uint32(block.timestamp), msg.value, uint16(destinationId)));
+        donateInfoList.push(DonateInfo(uint40(destinationId), uint32(block.timestamp), msg.sender, msg.value));
         numOfDonate[msg.sender]++;
 
         tokenId = angelToken.mint(msg.sender);

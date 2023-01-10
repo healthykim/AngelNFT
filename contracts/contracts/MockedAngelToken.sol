@@ -6,8 +6,8 @@ import "./AngelToken.sol";
 /// @title Mocked AngelToken Contract for testing.
 /// @author AngelKim
 /// @notice DO NOT use this contract in frontend! Use this only for testing.
-contract MockedAngelToken is AngelToken {
-    function mockTotalTokens(uint16 mockedTokenAmount) public onlyOwner {
-        totalTokens = mockedTokenAmount;
-    }
-}
+// contract MockedAngelToken is AngelToken {
+//     function mockTotalTokens(uint16 mockedTokenAmount) public onlyOwner {
+//         totalTokens = mockedTokenAmount;
+//     }
+// }

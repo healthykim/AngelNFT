@@ -55,19 +55,20 @@ contract Donate is Ownable {
      * @dev Donate money to `destinationId` and return NFT tokenId.
      * 
      * Usage
-     * - DonateContract.methods.donate(`destinationId`).send({ from: `account` })
+     * - DonateContract.methods.donate(`destinationId`, `isMint`).send({ from: `account` })
      *
      * Requirements
      * - `destinationId` must exist in destinations.
+     * - Return value should be ignored in the case of `isMint` == false.
      */
-    function donate(uint destinationId) public payable returns(uint16 tokenId) {
+    function donate(uint destinationId, bool isMint) public payable returns(uint16 tokenId) {
         require(destinations.length > destinationId, "Invalid destination Id");
         payable(destinations[destinationId].walletAddress).transfer(msg.value);
 
         donateInfoList.push(DonateInfo(uint40(destinationId), uint32(block.timestamp), msg.sender, msg.value));
         numOfDonate[msg.sender]++;
-
-        tokenId = angelToken.mint(msg.sender);
+        
+        tokenId = isMint ? angelToken.mint(msg.sender) : 0;
         emit DONATE(msg.sender, destinations[destinationId].walletAddress, msg.value);
         return tokenId;
     }
@@ -93,5 +94,15 @@ contract Donate is Ownable {
         }
 
         return info;
+    }
+
+    /**
+     * @dev Return `destinations` array.
+     * 
+     * Usage
+     * - DonateContract.methods.getDestinations().call()
+     */
+    function getDestinations() external view returns(DestinationInfo[] memory) {
+        return destinations;
     }
 }

@@ -237,7 +237,7 @@ struct Donate.DestinationInfo[] destinations
 ```
 
 Usage
-- AngelTokenContract.methods.destinations(`destinationId`).call()
+- DonateContract.methods.destinations(`destinationId`).call()
 
 ### numOfDonate
 
@@ -278,7 +278,7 @@ struct Donate.DonateInfo[] donateInfoList
 ```
 
 Usage
-- AngelTokenContract.methods.donateInfoList(`donateId`).call()
+- DonateContract.methods.donateInfoList(`donateId`).call()
 
 ### DONATE
 
@@ -295,7 +295,7 @@ function addDestination(address _destination, string name) public
 _Add destination to destination list.
 
 Usage
-- AngelTokenContract.methods.addDestination(`_destination`, `name`).send()
+- DonateContract.methods.addDestination(`_destination`, `name`).send()
 
 Requirements
 - `caller` should be owner(deployer) of `Donate` contract._
@@ -309,7 +309,7 @@ function donate(uint256 destinationId) public payable returns (uint16 tokenId)
 _Donate money to `destinationId` and return NFT tokenId.
 
 Usage
-- AngelTokenContract.methods.donate(`destinationId`).send({ from: `account` })
+- DonateContract.methods.donate(`destinationId`).send({ from: `account` })
 
 Requirements
 - `destinationId` must exist in destinations._
@@ -323,5 +323,5 @@ function getDonateHistory(address donator) external view returns (struct Donate.
 _Return donate history by `donator`.
 
 Usage
-- AngelTokenContract.methods.getDonateHistory(`donator`).call()_
+- DonateContract.methods.getDonateHistory(`donator`).call()_
 

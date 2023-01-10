@@ -1,19 +1,16 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/Strings.sol";
-
 
 /// @title NFT minting & managing contract(ERC721 compliant)
 /// @author AngelKim
 /// @notice Use this contract for minting/managing NFT.
-contract AngelToken is ERC721Enumerable, ERC721URIStorage, Ownable {
+contract AngelToken is ERC721Enumerable, Ownable {
     
     constructor() ERC721("InternetAngel", "IA") {}
-    uint16 totalTokens = 600;
-    string metadataBaseUri;
+    uint16 constant totalTokens = 600;
+    string metadataBaseUri = "https://gateway.ipfs.io/ipfs/bafybeib3epzqp3u5p36riiqibf7oprpwmw7psdmbedi3imy3tnwj3y3hne/images/";
 
     /** 
      * Usage
@@ -27,7 +24,7 @@ contract AngelToken is ERC721Enumerable, ERC721URIStorage, Ownable {
     mapping(uint16=>bool) public exchangeable; //TokenId -> bool(true: exchangeable, false: not)
     uint16 exchangeableTokenAmount = 0;
 
-    event MINT(address owner, uint256 tokenId, string uri);
+    event MINT(address owner, uint256 tokenId);
     event REQUEST(address toOwner, address fromOwner, uint16 toTokenId, uint16 fromTokenId);
     event EXCHANGE(address toOwner, address fromOwner, uint16 toTokenId, uint16 fromTokenId);
 
@@ -47,7 +44,7 @@ contract AngelToken is ERC721Enumerable, ERC721URIStorage, Ownable {
      *
      * @param _metadataBaseUri path where the NFT images/metadatas are located
      */
-    function setUriBase(string memory _metadataBaseUri) external onlyOwner {
+    function setUriBase(string calldata _metadataBaseUri) external onlyOwner {
         metadataBaseUri = _metadataBaseUri;
     }
 
@@ -63,13 +60,13 @@ contract AngelToken is ERC721Enumerable, ERC721URIStorage, Ownable {
      * Usage 
      * - AngelTokenContract.methods.mint(`account`).send({ from: `account` })
      */
-    function mint(address sender) public returns(uint16 tokenId) {
+    function mint(address sender) external returns(uint16 tokenId) {
         require(totalSupply()<totalTokens, "Ran out of token");
         tokenId = getNextTokenId();
-        string memory metadataUri = string(abi.encodePacked(metadataBaseUri, Strings.toString(tokenId), ".json"));
+        //string memory metadataUri = string(abi.encodePacked(metadataBaseUri, Strings.toString(tokenId), ".json"));
         _safeMint(sender, tokenId);
-        _setTokenURI(tokenId, metadataUri);
-        emit MINT(sender, tokenId, metadataUri);
+        //_setTokenURI(tokenId, metadataUri);
+        emit MINT(sender, tokenId);
     }
 
 
@@ -143,10 +140,8 @@ contract AngelToken is ERC721Enumerable, ERC721URIStorage, Ownable {
                 data[counter].uri = tokenURI(i);
                 counter++;
             }
+            if(counter > exchangeableTokenAmount) break;
         }
-
-        require(counter+1 == exchangeableTokenAmount, "Error in exchangeable array.");
-
         return data;
     }
 
@@ -227,37 +222,11 @@ contract AngelToken is ERC721Enumerable, ERC721URIStorage, Ownable {
     }
 
     //----------------------------------Overide functions----------------------------------//
-    /// @dev See {@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol}
-    function _beforeTokenTransfer(address from, address to, uint256 tokenId, uint256 batchSize)
-        internal
-        override(ERC721, ERC721Enumerable)
-    {
-        super._beforeTokenTransfer(from, to, tokenId, batchSize);
-    }
+    function tokenURI(uint256 tokenId) public view override returns (string memory) {
+        _requireMinted(tokenId);
 
-    /// @dev See {@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol}
-    function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
-        super._burn(tokenId);
-    }
-
-    /// @dev See {@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol}
-    function tokenURI(uint256 tokenId)
-        public
-        view
-        override(ERC721, ERC721URIStorage)
-        returns (string memory)
-    {
-        return super.tokenURI(tokenId);
-    }
-
-    /// @dev See {@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol}
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        override(ERC721, ERC721Enumerable)
-        returns (bool)
-    {
-        return super.supportsInterface(interfaceId);
+        string memory baseURI = metadataBaseUri;
+        return bytes(baseURI).length > 0 ? string(abi.encodePacked(metadataBaseUri, Strings.toString(tokenId), ".json")) : "";
     }
     //-------------------------------------------------------------------------------------//
 }

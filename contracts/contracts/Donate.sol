@@ -7,12 +7,7 @@ import "./AngelToken.sol";
 /// @notice Use this contract for donating/managing donation info.
 contract Donate is Ownable {
     AngelToken public angelToken;
-    /** 
-     * Usage
-     * - DonateContract.methods.destinations(`destinationId`).call()
-     */
-    DestinationInfo[] public destinations;
-    mapping(address => uint) public numOfDonate;
+
 
     struct DonateInfo {
         uint40 destinationId;
@@ -26,9 +21,12 @@ contract Donate is Ownable {
         string name;
     }
 
-    constructor(address angelTokenAddress) {
-        angelToken = AngelToken(angelTokenAddress);
-    }
+    /** 
+     * Usage
+     * - DonateContract.methods.destinations(`destinationId`).call()
+     */
+    DestinationInfo[] public destinations;
+    mapping(address => uint) public numOfDonate;
 
     /** 
      * Usage
@@ -37,6 +35,10 @@ contract Donate is Ownable {
     DonateInfo[] public donateInfoList;
 
     event DONATE(address from, address to, uint amount);
+
+    constructor(address angelTokenAddress) {
+        angelToken = AngelToken(angelTokenAddress);
+    }
 
     /**
      * @dev Add destination to destination list.

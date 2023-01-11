@@ -230,21 +230,6 @@ Use this contract for donating/managing donation info.
 contract AngelToken angelToken
 ```
 
-### destinations
-
-```solidity
-struct Donate.DestinationInfo[] destinations
-```
-
-Usage
-- DonateContract.methods.destinations(`destinationId`).call()
-
-### numOfDonate
-
-```solidity
-mapping(address => uint256) numOfDonate
-```
-
 ### DonateInfo
 
 ```solidity
@@ -265,10 +250,19 @@ struct DestinationInfo {
 }
 ```
 
-### constructor
+### destinations
 
 ```solidity
-constructor(address angelTokenAddress) public
+struct Donate.DestinationInfo[] destinations
+```
+
+Usage
+- DonateContract.methods.destinations(`destinationId`).call()
+
+### numOfDonate
+
+```solidity
+mapping(address => uint256) numOfDonate
 ```
 
 ### donateInfoList
@@ -284,6 +278,12 @@ Usage
 
 ```solidity
 event DONATE(address from, address to, uint256 amount)
+```
+
+### constructor
+
+```solidity
+constructor(address angelTokenAddress) public
 ```
 
 ### addDestination
@@ -303,16 +303,17 @@ Requirements
 ### donate
 
 ```solidity
-function donate(uint256 destinationId) public payable returns (uint16 tokenId)
+function donate(uint256 destinationId, bool isMint) public payable returns (uint16 tokenId)
 ```
 
 _Donate money to `destinationId` and return NFT tokenId.
 
 Usage
-- DonateContract.methods.donate(`destinationId`).send({ from: `account` })
+- DonateContract.methods.donate(`destinationId`, `isMint`).send({ from: `account` })
 
 Requirements
-- `destinationId` must exist in destinations._
+- `destinationId` must exist in destinations.
+- Return value should be ignored in the case of `isMint` == false._
 
 ### getDonateHistory
 
@@ -324,4 +325,15 @@ _Return donate history by `donator`.
 
 Usage
 - DonateContract.methods.getDonateHistory(`donator`).call()_
+
+### getDestinations
+
+```solidity
+function getDestinations() external view returns (struct Donate.DestinationInfo[])
+```
+
+_Return `destinations` array.
+
+Usage
+- DonateContract.methods.getDestinations().call()_
 

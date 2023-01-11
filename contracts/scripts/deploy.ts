@@ -11,6 +11,8 @@ async function main() {
   await angelToken.deployed();
   await donate.deployed();
 
+  await donate.addDestination('0x165CD37b4C644C2921454429E7F9358d18A45e14', 'Ukraine Goverment');
+
   console.log(`Angel Token was deployed to ${angelToken.address}`);
   console.log(`Donate was deployed to ${donate.address}`);
 }

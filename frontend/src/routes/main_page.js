@@ -56,9 +56,9 @@ function MainPage() {
                     <div>
                         <h4 className="text-xl font-semibold">Ukrainian Government Wallet Address</h4>
                         <ul className="pl-8 list-disc list-outside leading-8 pt-2 text-lg">
-                            {ukWalletAddresses.map((ukWalletAddress)=>{
+                            {ukWalletAddresses.map((ukWalletAddress, i)=>{
                                 return(
-                                    <li><span>{ukWalletAddress.currency} - </span><span className="cursor-pointer">{ukWalletAddress.address}</span></li>
+                                    <li key={i}><span>{ukWalletAddress.currency} - </span><span className="cursor-pointer">{ukWalletAddress.address}</span></li>
                                 );
                             })}
                         </ul>

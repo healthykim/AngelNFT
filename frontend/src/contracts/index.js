@@ -705,6 +705,7 @@ const DonateContractAbi = [
         "internalType": "bool",
         "name": "isMint",
         "type": "bool"
+
       }
     ],
     "name": "donate",
@@ -881,7 +882,6 @@ export const DonateContract = new web3.eth.Contract(
   DonateContractAbi,
   DonateContractAddress,
 );
-
 
 export const ipfsImageHash = "bafybeigk7nzlkdjyv7d4sszx4ibmrn63vyvt7d5kgrlyrk7os7p2x6apti"
 export const jsonHash = "bafybeifa7pxr5dkqtfqn3yycj5cjd6d5qkddgnnogzlckinre6zuxbkeze"

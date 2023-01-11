@@ -6,13 +6,13 @@ function Layout({ children }) {
     return (
         <div className='w-ful'>
             <div className='fixed w-full backdrop-blur'>
-                <nav class="flex h-16 justify-between items-center px-12">
-                    <div class="flex items-center">
-                        <Link to="/" class="text-black font-bold text-xl mr-4">Angel NFT</Link>
-                        <Link to="/donate" class="text-black mr-4">Donate</Link>
-                        <Link to="/trade" class="text-black mr-4">Trade</Link>
+                <nav className="flex h-16 justify-between items-center px-12">
+                    <div className="flex items-center">
+                        <Link to="/" className="text-black font-bold text-xl mr-4">Angel NFT</Link>
+                        <Link to="/donate" className="text-black mr-4">Donate</Link>
+                        <Link to="/trade" className="text-black mr-4">Trade</Link>
                     </div>
-                    <div class="flex items-center">
+                    <div className="flex items-center">
                         <div className='w-8 h-8 rounded-full bg-black'>
                         </div>
                     </div>

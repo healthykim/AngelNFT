@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link } from 'react-router-dom';
 import { DonateContract, ipfsImageHash } from "../contracts"
@@ -11,23 +10,6 @@ function DonatePage() {
   const [donated, setDonated] = useState(false);
   const [tokenId, setTokenId] = useState("");
   const [showModal, setShowModal] = useState(false);
-=======
-import React, { useEffect, useRef, useState } from "react";
-import { Link } from 'react-router-dom';
-import { ipfsImageHash } from "../contracts"
-
-
-function DonatePage() {
-    const [account, setAccount] = useState("");
-    const [donated, setDonated] = useState(false);
-    const [tokenId, setTokenId] = useState("");
-    const [showAlert, setShowAlert] = useState(false);
-    const [showModal, setShowModal] = useState(false);
-
-    useEffect(() => {
-        getAccount();
-    }, []);
->>>>>>> 58d5bad70836a2e40299f54712fef5961bb1380e
 
   const [showAlert, setShowAlert] = useState(false);
   const [toast, setToast] = useState("");
@@ -69,7 +51,6 @@ function DonatePage() {
       return;
     }
 
-<<<<<<< HEAD
     /// TODO: Contract Donate
     let response;
     try {
@@ -77,28 +58,6 @@ function DonatePage() {
       response = '0';
     } catch (error) {
       console.error(error);
-=======
-    const onClickDonate = async (isMint) => {
-        if (!account) {
-            setShowAlert(true);
-            return;
-        }
-
-        /// TODO: Contract Donate
-        let response;
-        try {
-            // response = DonateContract.methods.donate(destinationId, isMint).send({ from: account });
-            response = '0';
-        } catch (error) {
-            console.error(error);
-        }
-        if (!isMint && response === '0') {
-            return;
-        }
-        setTokenId(response);
-        setShowModal(true);
-        return;
->>>>>>> 58d5bad70836a2e40299f54712fef5961bb1380e
     }
     if (!isMint && response === '0') {
       return;
@@ -108,7 +67,6 @@ function DonatePage() {
     return;
   }
 
-<<<<<<< HEAD
   useLayoutEffect(() => {
     setToast("-top-20");
   }, [showAlert]);
@@ -163,39 +121,6 @@ function DonatePage() {
               <button onClick={() => { onClickDonate(false) }} className="cursor-pointer bg-gray-300 px-4 py-2 rounded-lg">
                 Donate Only
               </button>
-=======
-    useEffect(() => {
-        const timer = setTimeout(() => { setShowAlert(false) }, 2000);
-        return () => clearTimeout(timer);
-    }, [showAlert])
-
-    return (
-        <>
-            {showModal && (
-                <MintModal setShowModal={setShowModal} tokenId={tokenId}></MintModal>
-            )}
-            <div className="h-16"></div>
-            <div className="flex-col items-center text-center p-10">
-                <p>
-                    대충 지갑 연결하고 서명하는것 설명<br />
-                </p>
-                {/*TODO: 페이지 이동 -> 팝업*/}
-                <div className="flex gap-10 justify-center">
-                    <button onClick={() => { onClickDonate(true) }} className="mt-10 cursor-pointer bg-gray-300 px-4 py-2 rounded-lg">
-                        Donate with Mint
-                    </button>
-                    <button onClick={() => { onClickDonate(false) }} className="mt-10 cursor-pointer bg-gray-300 px-4 py-2 rounded-lg">
-                        Donate Only
-                    </button>
-                </div>
-                <br />
-                {
-                    donated &&
-                    <Link to="/show_NFT" state={{ tokenId: "angelKim" }}>
-                        <button className="mt-10 cursor-pointer bg-gray-300 px-4 py-2 rounded-lg">See my NFT</button>
-                    </Link>
-                }
->>>>>>> 58d5bad70836a2e40299f54712fef5961bb1380e
             </div>
           </div>
         </div>

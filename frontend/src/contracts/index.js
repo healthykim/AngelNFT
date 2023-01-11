@@ -700,6 +700,11 @@ const DonateContractAbi = [
         "internalType": "uint256",
         "name": "destinationId",
         "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "isMint",
+        "type": "bool"
       }
     ],
     "name": "donate",
@@ -742,6 +747,31 @@ const DonateContractAbi = [
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getDestinations",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "walletAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "string",
+            "name": "name",
+            "type": "string"
+          }
+        ],
+        "internalType": "struct Donate.DestinationInfo[]",
+        "name": "",
+        "type": "tuple[]"
       }
     ],
     "stateMutability": "view",

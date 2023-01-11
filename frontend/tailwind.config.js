@@ -18,6 +18,7 @@ module.exports = {
       indigo: colors.indigo,
       yellow: colors.yellow,
       'ukblue': '#005BBB',
+      'ukblue-darken': '#124c8a',
       'ukyellow': '#FFD500',
     },
   },

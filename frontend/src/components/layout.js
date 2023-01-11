@@ -12,10 +12,10 @@ function Layout({ children }) {
                         <Link to="/donate" className="text-black mr-4">Donate</Link>
                         <Link to="/trade" className="text-black mr-4">Trade</Link>
                     </div>
-                    <div className="flex items-center">
-                        <div className='w-8 h-8 rounded-full bg-black'>
+                    <Link to="/my_page" className="flex items-center">
+                        <div className='w-10 h-10 rounded-full bg-black'>
                         </div>
-                    </div>
+                    </Link>
                 </nav>
             </div>
             {/* <div className='h-16 bg-ukblue'></div> */}

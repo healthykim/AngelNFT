@@ -46,13 +46,7 @@ function MyPage() {
 
     const getAccountInfo = async () => {
         try {    
-            const balance = await AngelTokenContract.methods.balanceOf(account).call();
-            const tmpArr = [];
-            for(var i=0; i<balance; i++) {
-                const id = await AngelTokenContract.methods.tokenOfOwnerByIndex(account, i).call();
-                const exchange = await AngelTokenContract.methods.isExchangeable(id).call();
-                tmpArr.push([id, exchange])
-            }
+            const tmpArr = await AngelTokenContract.methods.getTokenDataOfOwner(account).call();
             setTokenIds(tmpArr);
         }
         catch (error) {

@@ -13,3 +13,7 @@ node_modules
 
 ## logs
 *.log
+
+## image & metadata
+store_images/images/
+store_images/metadata/

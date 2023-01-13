@@ -2,7 +2,7 @@ import React from "react";
 import { ipfsImageHash } from "../contracts"
 import { AngelTokenContract } from "../contracts";
 
-function NFTCard({ tokenId, isExchangeable, account }) {
+function NFTCard({tokenId, isExchangeable, metadata, account}) {
 
 
   const onClickSetExchange = async (tokenId) => {

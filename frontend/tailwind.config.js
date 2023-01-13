@@ -20,6 +20,7 @@ module.exports = {
       'ukblue': '#005BBB',
       'ukblue-darken': '#124c8a',
       'ukyellow': '#FFD500',
+      'ukyellow-op5': '#E6FFD500',
     },
   },
   plugins: [],

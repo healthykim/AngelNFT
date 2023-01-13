@@ -1,7 +1,7 @@
 import Web3 from 'web3';
 
-export const AngelTokenContractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
-export const DonateContractAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+export const AngelTokenContractAddress = "0x8FA0371338dd98df6330CFf48397fb183a60210F";
+export const DonateContractAddress = "0x805DCAF001C7Fd41482a84800E8539426834B391";
 
 const AngelTokenContractAbi = [
   {
@@ -65,6 +65,37 @@ const AngelTokenContractAbi = [
       {
         "indexed": false,
         "internalType": "address",
+        "name": "toOwner",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "fromOwner",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "toTokenId",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "fromTokenId",
+        "type": "uint16"
+      }
+    ],
+    "name": "EXCHANGE",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
         "name": "owner",
         "type": "address"
       },
@@ -73,12 +104,6 @@ const AngelTokenContractAbi = [
         "internalType": "uint256",
         "name": "tokenId",
         "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "string",
-        "name": "uri",
-        "type": "string"
       }
     ],
     "name": "MINT",
@@ -88,31 +113,19 @@ const AngelTokenContractAbi = [
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "address",
-        "name": "toOwner",
+        "name": "previousOwner",
         "type": "address"
       },
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "address",
-        "name": "fromOwner",
+        "name": "newOwner",
         "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint16",
-        "name": "toTokenId",
-        "type": "uint16"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint16",
-        "name": "fromTokenId",
-        "type": "uint16"
       }
     ],
-    "name": "OFFER",
+    "name": "OwnershipTransferred",
     "type": "event"
   },
   {
@@ -143,7 +156,7 @@ const AngelTokenContractAbi = [
         "type": "uint16"
       }
     ],
-    "name": "TRANSFER",
+    "name": "REQUEST",
     "type": "event"
   },
   {
@@ -193,16 +206,16 @@ const AngelTokenContractAbi = [
     "inputs": [
       {
         "internalType": "uint16",
-        "name": "to",
+        "name": "from",
         "type": "uint16"
       },
       {
         "internalType": "uint16",
-        "name": "from",
+        "name": "to",
         "type": "uint16"
       }
     ],
-    "name": "approveTransfer",
+    "name": "approveExchange",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -229,6 +242,44 @@ const AngelTokenContractAbi = [
   {
     "inputs": [
       {
+        "internalType": "uint16",
+        "name": "",
+        "type": "uint16"
+      }
+    ],
+    "name": "exchangeRequested",
+    "outputs": [
+      {
+        "internalType": "uint16",
+        "name": "",
+        "type": "uint16"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint16",
+        "name": "",
+        "type": "uint16"
+      }
+    ],
+    "name": "exchangeable",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "tokenId",
         "type": "uint256"
@@ -247,12 +298,24 @@ const AngelTokenContractAbi = [
   },
   {
     "inputs": [],
-    "name": "getNextTokenId",
+    "name": "getExchangeableTokenData",
     "outputs": [
       {
-        "internalType": "uint256",
+        "components": [
+          {
+            "internalType": "uint16",
+            "name": "tokenId",
+            "type": "uint16"
+          },
+          {
+            "internalType": "string",
+            "name": "uri",
+            "type": "string"
+          }
+        ],
+        "internalType": "struct AngelToken.TokenData[]",
         "name": "",
-        "type": "uint256"
+        "type": "tuple[]"
       }
     ],
     "stateMutability": "view",
@@ -316,18 +379,38 @@ const AngelTokenContractAbi = [
   {
     "inputs": [
       {
-        "internalType": "uint16",
+        "internalType": "uint256",
         "name": "tokenId",
-        "type": "uint16"
-      },
+        "type": "uint256"
+      }
+    ],
+    "name": "isExchangeable",
+    "outputs": [
       {
-        "internalType": "string",
-        "name": "_metadataURI",
-        "type": "string"
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
       }
     ],
     "name": "mint",
-    "outputs": [],
+    "outputs": [
+      {
+        "internalType": "uint16",
+        "name": "tokenId",
+        "type": "uint16"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -345,21 +428,16 @@ const AngelTokenContractAbi = [
     "type": "function"
   },
   {
-    "inputs": [
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
       {
-        "internalType": "uint16",
-        "name": "to",
-        "type": "uint16"
-      },
-      {
-        "internalType": "uint16",
-        "name": "from",
-        "type": "uint16"
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
-    "name": "offerTransfer",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -379,6 +457,44 @@ const AngelTokenContractAbi = [
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint16",
+        "name": "from",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint16",
+        "name": "to",
+        "type": "uint16"
+      }
+    ],
+    "name": "requestExchange",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint16",
+        "name": "tokenId",
+        "type": "uint16"
+      }
+    ],
+    "name": "resetExchangeableToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -446,6 +562,32 @@ const AngelTokenContractAbi = [
       }
     ],
     "name": "setApprovalForAll",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint16",
+        "name": "tokenId",
+        "type": "uint16"
+      }
+    ],
+    "name": "setExchangeableToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_metadataBaseUri",
+        "type": "string"
+      }
+    ],
+    "name": "setUriBase",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -576,6 +718,19 @@ const AngelTokenContractAbi = [
       }
     ],
     "name": "transferFrom",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

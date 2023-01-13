@@ -10,19 +10,20 @@ contract AngelToken is ERC721Enumerable, Ownable {
     
     constructor() ERC721("InternetAngel", "IA") {}
     uint16 constant totalTokens = 600;
-    string metadataBaseUri = "https://gateway.ipfs.io/ipfs/bafybeib3epzqp3u5p36riiqibf7oprpwmw7psdmbedi3imy3tnwj3y3hne/images/";
+    string metadataBaseUri = "https://gateway.ipfs.io/ipfs/bafybeiczuoy2mwlkyk67ru4jmm2hike4vevvl3k56isdzhkwyhweglygpi/metadata/";
 
     /** 
      * Usage
      * - AngelTokenContract.methods.exchangeRequested(`tokenId`).call()
      */
-    mapping(uint16=>uint16) public exchangeRequested; //TokenId -> TokenId
+    mapping(uint16=>uint16) public exchangeRequested; //from TokenId -> to TokenId
     /** 
      * Usage
      * - AngelTokenContract.methods.exchangeable(`tokenId`).call()
      */
     mapping(uint16=>bool) public exchangeable; //TokenId -> bool(true: exchangeable, false: not)
     uint16 exchangeableTokenAmount = 0;
+    mapping(uint16=>uint256) public exchangeRequestedAmount; //from TokenId -> to TokenId
 
     event MINT(address owner, uint256 tokenId);
     event REQUEST(address toOwner, address fromOwner, uint16 toTokenId, uint16 fromTokenId);
@@ -31,6 +32,7 @@ contract AngelToken is ERC721Enumerable, Ownable {
     struct TokenData {
         uint16 tokenId;
         string uri;
+        bool exchangeable;
     }
 
     /** 
@@ -50,7 +52,7 @@ contract AngelToken is ERC721Enumerable, Ownable {
 
     ///TODO : make this random
     function getNextTokenId() internal view returns(uint16) {
-        return uint16(totalSupply());
+        return uint16(totalSupply()+1);
     }
 
 
@@ -108,6 +110,7 @@ contract AngelToken is ERC721Enumerable, Ownable {
         ///이 부분은 내부 호출해도 내부 호출 함수의 sender가 tokenID owner이면 상관없는 건지?
         require(exchangeable[tokenId]==true, "Already not exchangeable.");
         exchangeable[tokenId]=false;
+        exchangeRequestedAmount[tokenId]=0;
         exchangeableTokenAmount--; //TODO: Counter?
     }
 
@@ -118,31 +121,10 @@ contract AngelToken is ERC721Enumerable, Ownable {
      * - AngelTokenContract.methods.isExchangeable(`tokenId`).call()
      */
     function isExchangeable(uint tokenId) external view returns(bool) {
-        for(uint16 i = 0; i<totalSupply(); i++) {
+        for(uint16 i = 1; i<=totalSupply(); i++) {
             if(exchangeable[i] && i == tokenId) return true;
         }
         return false;
-    }
-
-    /**
-     * @dev Return list of exchangable tokens data
-     * 
-     * Usage 
-     * - AngelTokenContract.methods.getExchangeableTokenData(`tokenId`).call()
-     */
-    function getExchangeableTokenData() external view returns(TokenData[] memory) {
-        TokenData[] memory data = new TokenData[](exchangeableTokenAmount);
-
-        uint16 counter = 0;
-        for(uint16 i = 0; i<totalSupply(); i++) {
-            if(exchangeable[i]) {
-                data[counter].tokenId = i;
-                data[counter].uri = tokenURI(i);
-                counter++;
-            }
-            if(counter > exchangeableTokenAmount) break;
-        }
-        return data;
     }
 
     /**
@@ -167,8 +149,10 @@ contract AngelToken is ERC721Enumerable, Ownable {
         require(toOwner != msg.sender, "Sender already has requested token.");
         require(exchangeRequested[from]!=to, "Cannot request exchange to the same token twice.");
         require(exchangeable[to], "To token is Not Exchangeable.");
+        require(!exchangeable[from], "From token is Exchangeable.");
 
         exchangeRequested[from] = to;
+        exchangeRequestedAmount[to] += 1;
         approve(toOwner, from);
         emit REQUEST(toOwner, fromOwner, to, from);
     }
@@ -205,6 +189,27 @@ contract AngelToken is ERC721Enumerable, Ownable {
     }
     
     /**
+     * @dev Return list of exchangable tokens data
+     * 
+     * Usage 
+     * - AngelTokenContract.methods.getExchangeableTokenData(`tokenId`).call()
+     */
+    function getExchangeableTokenData() external view returns(TokenData[] memory) {
+        TokenData[] memory data = new TokenData[](exchangeableTokenAmount);
+
+        uint16 counter = 0;
+        for(uint16 i = 1; i<=totalSupply(); i++) {
+            if(exchangeable[i]) {
+                data[counter].tokenId = i;
+                data[counter].uri = tokenURI(i);
+                counter++;
+            }
+            if(counter > exchangeableTokenAmount) break;
+        }
+        return data;
+    }
+
+    /**
      * @dev Return list of TokenData owned by `owner`
      * 
      * Usage 
@@ -216,6 +221,24 @@ contract AngelToken is ERC721Enumerable, Ownable {
         for(uint i=0; i<balanceOf(owner); i++) {
             data[i].tokenId = uint16(tokenOfOwnerByIndex(owner, i));
             data[i].uri = tokenURI(data[i].tokenId);
+            data[i].exchangeable = exchangeable[data[i].tokenId];
+        }
+
+        return data;
+    }
+
+    function getRequestOfTokenId(uint16 tokenId) external view returns(TokenData[] memory) {
+        TokenData[] memory data = new TokenData[](exchangeRequestedAmount[tokenId]);
+
+        uint16 counter = 0;
+        for(uint16 i=1; i<=totalSupply(); i++) {
+            if(exchangeRequested[i] == tokenId) {
+                data[counter].tokenId = i;
+                data[counter].uri = tokenURI(data[counter].tokenId);
+                data[counter].exchangeable = exchangeable[data[counter].tokenId];
+                counter ++;
+            }
+            if(counter > exchangeRequestedAmount[tokenId]) break;
         }
 
         return data;

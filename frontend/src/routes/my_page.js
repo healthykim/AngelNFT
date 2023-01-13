@@ -17,14 +17,14 @@ function MyPage() {
     const tabList = ['/my_page/my_nft', '/my_page/exchanging_nft'];
 
     useEffect(() => {
-        if(location.pathname == '/my_page'){
-            navigate(tabList[0], {replace: true});
+        if (location.pathname == '/my_page') {
+            navigate(tabList[0], { replace: true });
         }
     }, []);
 
     const onClickTab = (i) => {
         setTab(i);
-        navigate(tabList[i], {replace: true});
+        navigate(tabList[i], { replace: true });
     }
 
     const getAccount = async () => {

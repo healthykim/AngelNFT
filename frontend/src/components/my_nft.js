@@ -7,7 +7,7 @@ function MyNFT({ tokenIds, account }) {
         {tokenIds.length !== 0 &&
           tokenIds.map((v, i) => {
             return (
-              <NFTCard key={i} tokenId={v[0]} isExchangeable={v[1]} account={account} />
+              <NFTCard key={i} tokenId={v[0]} metadata={v[1]} isExchangeable={v[2]} account={account} />
             )
           })
         }

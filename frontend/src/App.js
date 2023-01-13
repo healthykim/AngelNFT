@@ -3,7 +3,6 @@ import MainPage from "./routes/main_page";
 import Layout from "./components/layout";
 import DonatePage from './routes/donate_page';
 import MyPage from './routes/my_page';
-import MyRequests from './routes/my_requests';
 
 
 function App() {

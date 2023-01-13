@@ -3,6 +3,7 @@ import { useState } from 'react';
 import MyNFT from "../components/my_nft"
 import { AngelTokenContract } from "../contracts";
 import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
+import MyRequest from "../components/my_request";
 
 ///TODO: 페이지 -> 팝업
 function MyPage() {
@@ -14,7 +15,7 @@ function MyPage() {
     const location = useLocation();
 
 
-    const tabList = ['/my_page/my_nft', '/my_page/exchanging_nft'];
+    const tabList = ['/my_page/my_nft', '/my_page/exchange_nft'];
 
     useEffect(() => {
         if (location.pathname == '/my_page') {
@@ -83,7 +84,7 @@ function MyPage() {
                 </div>
                 <Routes>
                     <Route path="my_nft" element={<MyNFT tokenIds={tokenIds} account={account}></MyNFT>}></Route>
-                    <Route path="change_nft" element={<p>여기다가 컴포넌트 만들어서 작업하시면 됩니다. 라우트 이름 바꾸셔도 됩니다.</p>}></Route>
+                    <Route path="exchange_nft" element={<MyRequest tokenIds={tokenIds} account={account}></MyRequest>}></Route>
                 </Routes>
             </div>
         </div>

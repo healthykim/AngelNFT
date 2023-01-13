@@ -33,9 +33,9 @@ function RequestQueue({tokenId, account}) {
 
     return (
         <>
-            {requestIds.length !== 0 &&
+            Exchange Requests <br/>
+            {requestIds.length !== 0 ?
                 <>
-                    Exchange Requests <br/>
                     <div className="flex flex-row">
                         {requestIds.map((v) => {
                             return (
@@ -44,7 +44,7 @@ function RequestQueue({tokenId, account}) {
                         })}
                     </div>
                 </>
-            }
+            : <>Empty</>}
         </>
     );
 }

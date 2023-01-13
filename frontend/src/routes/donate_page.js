@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link } from 'react-router-dom';
-import { DonateContract, ipfsImageHash } from "../contracts"
+import { AngelTokenContract, DonateContract, ipfsImageHash } from "../contracts"
 
 
 function DonatePage() {
@@ -52,16 +52,21 @@ function DonatePage() {
     }
 
     /// TODO: Contract Donate
-    let response;
+    let newTokenId;
     try {
-      response = await DonateContract.methods.donate(selectedDestinationId, isMint).send({ from: account });
+      const response = await DonateContract.methods.donate(selectedDestinationId, isMint).send({ from: account });
+      if(response.status) {
+        const balanceSize = await AngelTokenContract.methods.balanceOf(account).call();
+        newTokenId = await AngelTokenContract.methods.tokenOfOwnerByIndex(account, parseInt(balanceSize.length, 10) - 1).call();
+      }
     } catch (error) {
       console.error(error);
     }
-    if (!isMint && response === '0') {
+    if (!isMint && newTokenId === '0') {
       return;
     }
-    setTokenId(response);
+    console.log(newTokenId);
+    setTokenId(newTokenId);
     setShowModal(true);
     return;
   }
@@ -191,7 +196,7 @@ function MintModal({ setShowModal, tokenId }) {
           </div>
         </div>
         <div className={`p-2 overflow-clip duration-1000 transition-all ease-out`} style={modalHero ? { borderRadius:imgRef.current.getBoundingClientRect().width / 2, width: `${window.innerHeight * 0.6}px` } : { width: `${window.innerHeight * 0.6}px` }}>
-          <img className="h-full object-contain rounded-lg" src={`https://gateway.ipfs.io/ipfs/${ipfsImageHash}/images/${tokenId}.PNG`} alt={'mint image'} ref={imgRef}></img>
+          <img className="h-full object-contain rounded-lg" src={`https://gateway.ipfs.io/ipfs/${ipfsImageHash}/images/${tokenId}.png`} alt={'mint image'} ref={imgRef}></img>
         </div>
       </div>
     </div>

@@ -54,7 +54,7 @@ function DonatePage() {
     /// TODO: Contract Donate
     let response;
     try {
-      // response = DonateContract.methods.donate(destinationId, isMint).send({ from: account });
+      response = await DonateContract.methods.donate(selectedDestinationId, isMint).send({ from: account });
       response = '0';
     } catch (error) {
       console.error(error);

@@ -64,7 +64,6 @@ function MyPage() {
                     })
                 }
                 <br />
-                <br />
                 Exchange Request <br />
             </p>        
         </div>

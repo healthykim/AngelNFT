@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useState } from 'react';
 import MyNFT from "../components/my_nft"
 import { AngelTokenContract } from "../contracts";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 
 ///TODO: 페이지 -> 팝업
 function MyPage() {
@@ -11,11 +11,20 @@ function MyPage() {
     const [tab, setTab] = useState(0);
 
     const navigate = useNavigate();
+    const location = useLocation();
+
+
     const tabList = ['/my_page/my_nft', '/my_page/exchanging_nft'];
+
+    useEffect(() => {
+        if(location.pathname == '/my_page'){
+            navigate(tabList[0], {replace: true});
+        }
+    }, []);
 
     const onClickTab = (i) => {
         setTab(i);
-        navigate(tabList[i]);
+        navigate(tabList[i], {replace: true});
     }
 
     const getAccount = async () => {

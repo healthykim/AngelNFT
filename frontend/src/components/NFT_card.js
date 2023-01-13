@@ -26,7 +26,7 @@ function NFTCard({ tokenId, isExchangeable, account }) {
 
   return (
     <div>
-      <img className="w-full rounded-t-2xl" src={`https://gateway.ipfs.io/ipfs/${ipfsImageHash}/images/${tokenId}.PNG`} />
+      <img className="w-full rounded-t-2xl" src={`https://gateway.ipfs.io/ipfs/${ipfsImageHash}/images/${tokenId}.png`} />
       {!isExchangeable
         ? <button onClick={() => { onClickSetExchange(tokenId) }} className="bg-gray-300 w-full py-2 rounded-b-2xl">Make Exchangeable</button>
         : <button onClick={() => { onClickReSetExchange(tokenId) }} className="bg-gray-300 w-full py-2 rounded-b-2xl">Make Unexchangeable</button>

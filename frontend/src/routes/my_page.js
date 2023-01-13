@@ -45,17 +45,12 @@ function MyPage() {
     }
 
     const getAccountInfo = async () => {
-        try {
+        try {    
             const balance = await AngelTokenContract.methods.balanceOf(account).call();
             const tmpArr = [];
-            for (var i = 0; i < balance; i++) {
+            for(var i=0; i<balance; i++) {
                 const id = await AngelTokenContract.methods.tokenOfOwnerByIndex(account, i).call();
                 const exchange = await AngelTokenContract.methods.isExchangeable(id).call();
-                // 사진이 몇개 없어서 일단은 이렇게 어거지로 여러개 만듬.
-                tmpArr.push([id, exchange])
-                tmpArr.push([id, exchange])
-                tmpArr.push([id, exchange])
-                tmpArr.push([id, exchange])
                 tmpArr.push([id, exchange])
             }
             setTokenIds(tmpArr);

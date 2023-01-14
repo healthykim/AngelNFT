@@ -111,7 +111,7 @@ function DonatePage() {
                 destinations.map((destination, id) => {
                   return (
                     <div className="flex items-center pl-2" key={id}>
-                      <input type="radio" id={id} name="destination" className="appearance-none w-4 h-4 border-2 border-ukblue-darken checked:bg-ukblue" />
+                      <input type="radio" id={id} name="destination" className="appearance-none w-4 h-4 border-2 border-ukblue-darken checked:bg-ukblue"/>
                       <label htmlFor={id} className="pl-2 text-lg">{destination.name}</label>
                     </div>
                   );

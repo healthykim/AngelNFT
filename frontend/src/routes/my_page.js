@@ -15,7 +15,6 @@ function MyPage() {
     const navigate = useNavigate();
     const location = useLocation();
 
-
     const tabList = ['/my_page/my_nft', '/my_page/exchange_nft', '/my_page/donate_history'];
 
     useEffect(() => {
@@ -47,7 +46,7 @@ function MyPage() {
             console.error(error);
         }
     }
-
+    
     useEffect(() => {
         getAccount();
     }, [])

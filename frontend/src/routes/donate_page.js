@@ -1,17 +1,19 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { Link } from 'react-router-dom';
-import { AngelTokenContract, DonateContract, ipfsImageHash } from "../contracts"
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import { AngelTokenContract, DonateContract } from "../contracts"
+import MintModal from "../components/modal/mint_modal";
+import LoadingModal from "../components/modal/loading_modal";
 
 
 function DonatePage() {
   const [account, setAccount] = useState("");
   const [destinations, setDestinations] = useState([]);
   const [selectedDestinationId, setSelectedDestinationId] = useState(null);
-  const [donated, setDonated] = useState(false);
   const [tokenId, setTokenId] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const [showAlert, setShowAlert] = useState(false);
+  const [showAlert, setShowAlert] = useState("");
+
   const [toast, setToast] = useState("");
 
   useEffect(() => {
@@ -47,25 +49,33 @@ function DonatePage() {
 
   const onClickDonate = async (isMint) => {
     if (!account) {
-      setShowAlert(true);
+      setShowAlert("Connect Metamask Wallet!");
+      return;
+    }
+    if (selectedDestinationId === null) {
+      setShowAlert("Select Destination!");
       return;
     }
 
     /// TODO: Contract Donate
     let newTokenId;
+    setIsLoading(true);
     try {
       const response = await DonateContract.methods.donate(selectedDestinationId, isMint).send({ from: account });
-      if(response.status) {
+      if (response.status) {
         const balanceSize = await AngelTokenContract.methods.balanceOf(account).call();
         newTokenId = await AngelTokenContract.methods.tokenOfOwnerByIndex(account, parseInt(balanceSize.length, 10) - 1).call();
       }
     } catch (error) {
       console.error(error);
     }
+    setIsLoading(false);
+
     if (!isMint && newTokenId === '0') {
       return;
     }
-    console.log(newTokenId);
+
+    // TODO: isMint랑 성공유무에 따라서 보여주는 Modal 분기
     setTokenId(newTokenId);
     setShowModal(true);
     return;
@@ -80,7 +90,7 @@ function DonatePage() {
     const timer = setTimeout(() => {
       setToast("-top-20");
       setTimeout(() => {
-        setShowAlert(false);
+        setShowAlert("");
       }, 600);
     }, 2000);
     return () => clearTimeout(timer);
@@ -111,7 +121,7 @@ function DonatePage() {
                 destinations.map((destination, id) => {
                   return (
                     <div className="flex items-center pl-2" key={id}>
-                      <input type="radio" id={id} name="destination" className="appearance-none w-4 h-4 border-2 border-ukblue-darken checked:bg-ukblue"/>
+                      <input type="radio" id={id} name="destination" className="appearance-none w-4 h-4 border-2 border-ukblue-darken checked:bg-ukblue" />
                       <label htmlFor={id} className="pl-2 text-lg">{destination.name}</label>
                     </div>
                   );
@@ -129,77 +139,18 @@ function DonatePage() {
           </div>
         </div>
       </div>
+      {
+        isLoading &&
+        <LoadingModal></LoadingModal>
+      }
 
-      {showAlert ? (
+      {
+        showAlert !== "" &&
         <div className={`fixed font-medium duration-500 text-center left-0 right-0 ${showAlert && toast}`}>
-          <div className="bg-red-300 inline-block py-4 px-24 rounded-2xl">Connect Metamask Wallet!</div>
+          <div className="bg-red-300 inline-block py-4 px-24 rounded-2xl">{showAlert}</div>
         </div>
-      ) : null}
+      }
     </>
-  );
-}
-
-function MintModal({ setShowModal, tokenId }) {
-  const modalRef = useRef(null);
-  const imgRef = useRef(null);
-  const [modalFade, setModalFade] = useState("opacity-0");
-  const [heroStyle, setHeroStyle] = useState({});
-  const [modalHero, setModalHero] = useState(false);
-  let isAnimating = false;
-
-  const handleClickOutside = async (e) => {
-    if (modalRef.current && !modalRef.current.contains(e.target) && !isAnimating) {
-      isAnimating = true;
-      const modalRect = modalRef.current.getBoundingClientRect();
-      const imgRect = imgRef.current.getBoundingClientRect();
-      const scaleFactor = 40 / imgRect.height;
-
-      let style = {
-        transform: `matrix(${scaleFactor}, 0, 0, ${scaleFactor}, 
-          ${(-modalRect.x + window.innerWidth - 88) - modalRect.width / 2 + 20}, 
-          ${(-modalRect.y + 3 * 4) - modalRect.height / 2 + 20}
-          )`,
-        opacity: 0.7,
-        borderRadius: '999px',
-        transition: "transform 1s, opacity 1s, border-radius 1s",
-        backgroundColor: 'transparent',
-      };
-      setHeroStyle(style);
-      setModalHero(true);
-      setTimeout(() => {
-        isAnimating = false;
-        setShowModal(false);
-      }, 1200);
-    }
-  };
-
-  useEffect(() => {
-    setModalFade("opacity-100")
-    isAnimating = true;
-    setTimeout(()=>{
-      isAnimating = false;
-    }, 500);
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  return (
-    <div className="fixed top-0 left-0 w-full h-full py-8 flex items-center justify-center" onClick={() => { }}>
-      <div style={heroStyle} ref={modalRef}
-        className={`relative flex flex-col text-center items-center rounded-2xl duration-500 ${modalFade} bg-white drop-shadow-2xl`}
-      >
-        <div className="flex-none modal">
-          <div className="flex items-center pt-4 pb-2">
-            <h1 className="text-lg flex-none font-medium  text-center">{!modalHero && 'Your mint'}</h1>
-          </div>
-        </div>
-        <div className={`p-2 overflow-clip duration-1000 transition-all ease-out`} style={modalHero ? { borderRadius:imgRef.current.getBoundingClientRect().width / 2, width: `${window.innerHeight * 0.6}px` } : { width: `${window.innerHeight * 0.6}px` }}>
-          <img className="h-full object-contain rounded-lg" src={`https://gateway.ipfs.io/ipfs/${ipfsImageHash}/images/${tokenId}.png`} alt={'mint image'} ref={imgRef}></img>
-        </div>
-      </div>
-    </div>
   );
 }
 

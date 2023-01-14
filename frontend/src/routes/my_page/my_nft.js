@@ -1,4 +1,4 @@
-import NFTCard from "./NFT_card";
+import NFTCard from "../../components/NFT_card";
 
 function MyNFT({ tokenIds, account }) {
   return (

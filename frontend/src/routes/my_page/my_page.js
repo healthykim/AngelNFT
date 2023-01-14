@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { useState } from 'react';
-import MyNFT from "../components/my_nft"
-import { AngelTokenContract } from "../contracts";
+import { AngelTokenContract } from "../../contracts";
 import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
-import MyRequest from "../components/my_request";
-import MyHistory from "../components/my_history";
+import MyRequest from "./my_request";
+import MyHistory from "./my_history";
+import MyNFT from "./my_nft";
 
 ///TODO: 페이지 -> 팝업
 function MyPage() {

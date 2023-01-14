@@ -1,7 +1,6 @@
 import React from "react"
-import { AngelTokenContract } from "../contracts";
-import NFTCard from "./NFT_card";
-import RequestQueue from "./request_queue";
+import NFTCard from "../../components/NFT_card";
+import RequestQueue from "../../components/request_queue";
 
 function MyRequest( {tokenIds, account} ) {
 

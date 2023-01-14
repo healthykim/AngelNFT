@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { DonateContract } from "../contracts";
+import { DonateContract } from "../../contracts";
 
 function MyHistory({account}) {
     const [donateHistory, setDoateHistory] = useState([]);

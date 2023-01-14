@@ -21,7 +21,7 @@ async function main() {
         const metadata = {
             "name": `Angel ${fileName}`,
             "description": "Angel NFT",
-            "image": `https://gateway.ipfs.io/ipfs/bafybeib3epzqp3u5p36riiqibf7oprpwmw7psdmbedi3imy3tnwj3y3hne/images/${fileFullName}`
+            "image": `https://gateway.ipfs.io/ipfs/bafybeidnrgqxutekuvycwirabsfesgfbn2t5daqcty7h7rx7t4fno7577u/images/${fileFullName}`
         }
         fs.writeFile(`${metadataDir}/${fileName}.json`, JSON.stringify(metadata), function(error){if(error){console.log(error)}});
     })

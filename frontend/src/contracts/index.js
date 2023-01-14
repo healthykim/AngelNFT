@@ -1,7 +1,7 @@
 import Web3 from 'web3';
 
-export const AngelTokenContractAddress = "0x8FA0371338dd98df6330CFf48397fb183a60210F";
-export const DonateContractAddress = "0x805DCAF001C7Fd41482a84800E8539426834B391";
+export const AngelTokenContractAddress = "0x735E93D6437D77ADAb4720934C6Bf82fDC3ddC61";
+export const DonateContractAddress = "0x5Dc3DAdc26df90ecc518F51Bd16Bea9e391D69b7";
 
 const AngelTokenContractAbi = [
   {
@@ -266,6 +266,25 @@ const AngelTokenContractAbi = [
         "type": "uint16"
       }
     ],
+    "name": "exchangeRequestedAmount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint16",
+        "name": "",
+        "type": "uint16"
+      }
+    ],
     "name": "exchangeable",
     "outputs": [
       {
@@ -311,6 +330,47 @@ const AngelTokenContractAbi = [
             "internalType": "string",
             "name": "uri",
             "type": "string"
+          },
+          {
+            "internalType": "bool",
+            "name": "exchangeable",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct AngelToken.TokenData[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint16",
+        "name": "tokenId",
+        "type": "uint16"
+      }
+    ],
+    "name": "getRequestOfTokenId",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint16",
+            "name": "tokenId",
+            "type": "uint16"
+          },
+          {
+            "internalType": "string",
+            "name": "uri",
+            "type": "string"
+          },
+          {
+            "internalType": "bool",
+            "name": "exchangeable",
+            "type": "bool"
           }
         ],
         "internalType": "struct AngelToken.TokenData[]",
@@ -342,6 +402,11 @@ const AngelTokenContractAbi = [
             "internalType": "string",
             "name": "uri",
             "type": "string"
+          },
+          {
+            "internalType": "bool",
+            "name": "exchangeable",
+            "type": "bool"
           }
         ],
         "internalType": "struct AngelToken.TokenData[]",
@@ -1038,6 +1103,6 @@ export const DonateContract = new web3.eth.Contract(
   DonateContractAddress,
 );
 
-export const ipfsImageHash = "bafybeigk7nzlkdjyv7d4sszx4ibmrn63vyvt7d5kgrlyrk7os7p2x6apti"
-export const jsonHash = "bafybeifa7pxr5dkqtfqn3yycj5cjd6d5qkddgnnogzlckinre6zuxbkeze"
+export const ipfsImageHash = "bafybeidnrgqxutekuvycwirabsfesgfbn2t5daqcty7h7rx7t4fno7577u"
+export const jsonHash = "bafybeiczuoy2mwlkyk67ru4jmm2hike4vevvl3k56isdzhkwyhweglygpi"
 ///TODO : 연결방법 다른것도 있는지 찾아보기

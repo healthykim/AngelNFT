@@ -3,6 +3,8 @@ import { useState } from 'react';
 import MyNFT from "../components/my_nft"
 import { AngelTokenContract } from "../contracts";
 import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
+import MyRequest from "../components/my_request";
+import MyHistory from "../components/my_history";
 
 ///TODO: 페이지 -> 팝업
 function MyPage() {
@@ -13,8 +15,7 @@ function MyPage() {
     const navigate = useNavigate();
     const location = useLocation();
 
-
-    const tabList = ['/my_page/my_nft', '/my_page/exchanging_nft'];
+    const tabList = ['/my_page/my_nft', '/my_page/exchange_nft', '/my_page/donate_history'];
 
     useEffect(() => {
         if (location.pathname == '/my_page') {
@@ -34,6 +35,8 @@ function MyPage() {
                     method: 'eth_requestAccounts',
                 });
                 setAccount(accounts[0]);
+                const tmpArr = await AngelTokenContract.methods.getTokenDataOfOwner(accounts[0]).call();
+                setTokenIds(tmpArr);
             }
             else {
                 alert("Install Metamask!");
@@ -43,35 +46,10 @@ function MyPage() {
             console.error(error);
         }
     }
-
-    const getAccountInfo = async () => {
-        try {
-            const balance = await AngelTokenContract.methods.balanceOf(account).call();
-            const tmpArr = [];
-            for (var i = 0; i < balance; i++) {
-                const id = await AngelTokenContract.methods.tokenOfOwnerByIndex(account, i).call();
-                const exchange = await AngelTokenContract.methods.isExchangeable(id).call();
-                // 사진이 몇개 없어서 일단은 이렇게 어거지로 여러개 만듬.
-                tmpArr.push([id, exchange])
-                tmpArr.push([id, exchange])
-                tmpArr.push([id, exchange])
-                tmpArr.push([id, exchange])
-                tmpArr.push([id, exchange])
-            }
-            setTokenIds(tmpArr);
-        }
-        catch (error) {
-            console.log(error)
-        }
-    }
-
+    
     useEffect(() => {
         getAccount();
     }, [])
-
-    useEffect(() => {
-        getAccountInfo();
-    }, [account])
 
     return (
         <div>
@@ -90,10 +68,15 @@ function MyPage() {
                         <div className={`absolute w-full h-full -z-20 opacity-50 ${tab === 1 ? 'bg-ukyellow' : ''}`}></div>
                         <p className="p-1">change NFT</p>
                     </button>
+                    <button onClick={() => { onClickTab(2) }} className="flex-1 text-center relative mx-8">
+                        <div className={`absolute w-full h-full -z-20 opacity-50 ${tab === 2 ? 'bg-ukyellow' : ''}`}></div>
+                        <p className="p-1">History</p>
+                    </button>
                 </div>
                 <Routes>
                     <Route path="my_nft" element={<MyNFT tokenIds={tokenIds} account={account}></MyNFT>}></Route>
-                    <Route path="change_nft" element={<p>여기다가 컴포넌트 만들어서 작업하시면 됩니다. 라우트 이름 바꾸셔도 됩니다.</p>}></Route>
+                    <Route path="exchange_nft" element={<MyRequest tokenIds={tokenIds} account={account}></MyRequest>}></Route>
+                    <Route path="donate_history" element={<MyHistory account={account}></MyHistory>}></Route>
                 </Routes>
             </div>
         </div>

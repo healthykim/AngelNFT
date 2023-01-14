@@ -19,7 +19,7 @@ describe("AngelToken", function() {
     let angelToken: AngelToken;
     //let mockedAngelToken: MockedAngelToken;
     let accounts: Signer[]; // [0] is owner
-    let baseUri = "https://gateway.ipfs.io/ipfs/bafybeib3epzqp3u5p36riiqibf7oprpwmw7psdmbedi3imy3tnwj3y3hne/images/";
+    let baseUri = "https://gateway.ipfs.io/ipfs/bafybeiczuoy2mwlkyk67ru4jmm2hike4vevvl3k56isdzhkwyhweglygpi/metadata";
 
     beforeEach(async () => {
         const AngelToken = await ethers.getContractFactory("AngelToken");
@@ -51,7 +51,7 @@ describe("AngelToken", function() {
     
         it("Should mint NFT with right token data", async function() {
             const mintTransaction = await angelToken.connect(accounts[1]).mint(accounts[1].getAddress());
-            const tokenId = mintTransaction.value;
+            const tokenId = 1;
             const tokenIdByOwner = await angelToken.tokenOfOwnerByIndex(await accounts[1].getAddress(), 0);
             const tokenUri = await angelToken.tokenURI(tokenId);
 
@@ -59,6 +59,7 @@ describe("AngelToken", function() {
             assert(tokenUri.search(`${baseUri}${tokenId}`)>=0, "Incorrect tokenURI");
 
             const reciept = await mintTransaction.wait();
+
             assert.exists(reciept.events?.find((e)=> e.event === 'MINT'), "Event not generated");
         })
 

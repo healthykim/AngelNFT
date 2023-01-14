@@ -27,7 +27,7 @@ function NFTCard({ tokenId, isExchangeable, metadata, account}) {
 
 
   return (
-    <div className="drop-shadow-2xl border-8 rounded-2xl border-gray-300 overflow-clip -z-20">
+    <div className="drop-shadow-2xl border-8 rounded-2xl border-gray-300 overflow-clip">
       <img className="w-full" src={`https://gateway.ipfs.io/ipfs/${ipfsImageHash}/images/${tokenId}.png`} />
       {!exchangeable
         ? <button onClick={() => { onClickSetExchange(tokenId) }} className="bg-gray-300 w-full pt-3 pb-1 px-4">

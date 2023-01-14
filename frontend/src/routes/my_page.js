@@ -64,6 +64,7 @@ function MyPage() {
             console.log(error)
         }
     }
+
     useEffect(() => {
         getAccount();
     }, [])
@@ -71,8 +72,6 @@ function MyPage() {
     useEffect(() => {
         getAccountInfo();
     }, [account])
-
-
 
     return (
         <div>

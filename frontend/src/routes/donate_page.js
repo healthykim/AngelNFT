@@ -59,11 +59,11 @@ function DonatePage() {
     }
 
     /// TODO: Contract Donate
-    let newTokenId;
+    let newTokenId = '0';
     setIsLoading(true);
     try {
       const response = await DonateContract.methods.donate(selectedDestinationId, isMint).send({ from: account });
-      if (response.status) {
+      if(response.status && isMint) {
         const balanceSize = await AngelTokenContract.methods.balanceOf(account).call();
         newTokenId = await AngelTokenContract.methods.tokenOfOwnerByIndex(account, parseInt(balanceSize.length, 10) - 1).call();
       }

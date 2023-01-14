@@ -1,69 +1,61 @@
 import {useState, useEffect, useRef} from "react";
 import {ipfsImageHash, AngelTokenContract} from "../../contracts";
 
-function ChooseNFTModal({ setShowModal }) {
-    const [account, setAccount] = useState();
-    const [tokenIds, setTokenIds] = useState([]);
-  
-    const modalRef = useRef(null);
-  
-    const handleClickOutside = async (e) => {
-      if (modalRef.current && !modalRef.current.contains(e.target)) {
-        setShowModal(false);
-      }
+function ChooseNFTModal({ setShowModal, toTokenId }) {
+  const [tokenOfOwner, setTokenOfOwner] = useState([]);
+
+  const modalRef = useRef(null);
+
+  const handleClickOutside = async (e) => {
+    if (modalRef.current && !modalRef.current.contains(e.target)) {
+      setShowModal(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
     };
-  
-    useEffect(() => {
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-    }, []);
-  
-    const getAccount = async () => {
-      try {
-        if (window.ethereum) {
-          const accounts = await window.ethereum.request({
-            method: 'eth_requestAccounts',
-          });
-          setAccount(accounts[0]);
-          const tmpArr = await AngelTokenContract.methods.getTokenDataOfOwner(accounts[0]).call();
-          setTokenIds(tmpArr);
-        }
-        else {
-          alert("Install Metamask!");
+  }, []);
+
+
+
+  const onClickImage = async(fromTokenId, toTokenId) => {
+    // TODO: healthyKim!!
+    try {
+      const isDuplicatedRequest = (await AngelTokenContract.methods.exchangeRequested(fromTokenId).call() == toTokenId);
+      if(!isDuplicatedRequest) {
+        const response = await AngelTokenContract.methods.requestExchange(fromTokenId, toTokenId);
+        if(!response.status) {
+          console.log(response);
+          alert("Invalid operation");
         }
       }
-      catch (error) {
+      else {
+        alert("Already requested");
+      }
+    }
+    catch (error) {
         console.error(error);
-      }
     }
-  
-    useEffect(() => {
-      getAccount();
-    }, []);
-  
-    const onImgClick = () => {
-      // TODO: healthyKim!!
-    }
-  
-    return (
-      <div className="fixed top-0 left-0 w-full h-full py-8 flex items-center justify-center" onClick={() => { }}>
-        <div className="w-8/12 h-3/6 2xl:h-2/6 bg-white drop-shadow-2xl rounded-2xl flex flex-col" ref={modalRef}>
-          <p className="p-8 text-center text-2xl">Choose to exchange</p>
-          <div className="flex-1 h-full flex flex-row gap-8 pb-8 mx-8 items-end overflow-x-auto">
-            {
-              tokenIds.map((tokenId, i) => {
-                console.log(tokenId);
-                return (
-                  <img key={i} onClick={() => { }} className="h-full rounded-md cursor-pointer" src={`https://gateway.ipfs.io/ipfs/${ipfsImageHash}/images/${tokenId[0]}.png`} />
-                );
-              })
-            }
-          </div>
-        </div>
-      </div>
-    );
   }
 
-  export default ChooseNFTModal;
+  return (
+    <div className="fixed top-0 left-0 w-full h-full py-8 flex items-center justify-center" onClick={() => { }}>
+      <div className="w-8/12 h-4/6 bg-white drop-shadow-2xl rounded-2xl flex flex-col" ref={modalRef}>
+        <p className="p-4 text-center text-xl">Choose to exchange</p>
+        <div className="flex-1 h-full flex flex-row gap-8 my-6 mx-4 items-center overflow-x-auto">
+          {
+            tokenOfOwner.map((token, i) => {
+              return (
+                !token.exchangeable &&
+                <img onClick={()=>{onClickImage(token.tokenId)}} className="h-4/6 rounded-md cursor-pointer" src={`https://gateway.ipfs.io/ipfs/${ipfsImageHash}/images/${token.tokenId}.png`} />
+              );
+            })
+          }
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -38,7 +38,7 @@ function RequestQueue({ tokenId, account }) {
       </div>
       {
         requestIds.length !== 0
-          ? <div className="h-3/6 w-full flex flex-row items-end gap-8 mb-10">
+          ? <div className="h-3/6 w-full flex flex-row items-end gap-8 mb-12">
             {requestIds.map((requestId, i) => {
               return (
                 <img
@@ -50,7 +50,7 @@ function RequestQueue({ tokenId, account }) {
               )
             })}
           </div>
-          : <div className="h-10"></div>
+          : <div className="h-12"></div>
       }
     </div>
   );

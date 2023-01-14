@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { ipfsImageHash } from "../contracts"
 import { AngelTokenContract } from "../contracts";
 
-function NFTCard({ tokenId, isExchangeable, metadata, account, textPosi = "top" }) {
+function NFTCard({ tokenId, isExchangeable, metadata, account}) {
   const [exchangeable, setExchangeable] = useState(isExchangeable);
 
   const onClickSetExchange = async (tokenId) => {
@@ -27,11 +27,15 @@ function NFTCard({ tokenId, isExchangeable, metadata, account, textPosi = "top" 
 
 
   return (
-    <div>
-      <img className="w-full rounded-t-2xl" src={`https://gateway.ipfs.io/ipfs/${ipfsImageHash}/images/${tokenId}.png`} />
+    <div className="drop-shadow-2xl border-8 rounded-2xl border-gray-300 overflow-clip -z-20">
+      <img className="w-full" src={`https://gateway.ipfs.io/ipfs/${ipfsImageHash}/images/${tokenId}.png`} />
       {!exchangeable
-        ? <button onClick={() => { onClickSetExchange(tokenId) }} className="bg-gray-300 w-full py-2 rounded-b-2xl px-4">Make Exchangeable</button>
-        : <button onClick={() => { onClickReSetExchange(tokenId) }} className="bg-gray-300 w-full py-2 rounded-b-2xl px-4">Make Unexchangeable</button>
+        ? <button onClick={() => { onClickSetExchange(tokenId) }} className="bg-gray-300 w-full pt-3 pb-1 px-4">
+          <div>Make Exchangeable</div>
+        </button>
+        : <button onClick={() => { onClickReSetExchange(tokenId) }} className="bg-gray-300 w-full pt-3 pb-1 px-4">
+          <div>Make Unexchangeable</div>
+        </button>
       }
     </div>
   )

@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 
 function Layout({ children }) {
   return (
-    <div className='w-ful'>
-      <div className='fixed w-full backdrop-blur'>
+    <div className='w-full'>
+      <div className='fixed w-full backdrop-blur z-30'>
         <nav className="flex h-16 justify-between items-center px-12">
           <div className="flex items-center">
             <Link to="/" className="text-black font-bold text-xl mr-4">Angel NFT</Link>

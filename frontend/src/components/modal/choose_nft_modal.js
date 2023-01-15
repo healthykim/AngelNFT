@@ -62,7 +62,7 @@ function ChooseNFTModal({ setShowModal, toTokenId, account, setIsLoading }) {
   }
 
   return (
-    <div className="fixed top-0 left-0 w-full h-full py-8 flex items-center justify-center" onClick={() => { }}>
+    <div className="fixed z-50 top-0 left-0 w-full h-full py-8 flex items-center justify-center" onClick={() => { }}>
       <div className="w-8/12 h-4/6 bg-white drop-shadow-2xl rounded-2xl flex flex-col" ref={modalRef}>
         <p className="p-4 text-center text-xl">Choose to exchange</p>
         <div className="flex-1 h-full flex flex-row gap-8 my-6 mx-4 items-center overflow-x-auto">

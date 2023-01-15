@@ -88,6 +88,7 @@ contract AngelToken is ERC721Enumerable, Ownable {
         require(_exists(tokenId), "Token Id is not valid.");
         require(ownerOf(tokenId)==msg.sender, "Only owner of the token can exchange the token.");
         require(exchangeable[tokenId]==false, "Already exchangeable.");
+        exchangeRequested[tokenId]=0;
         exchangeable[tokenId]=true;
         exchangeableTokenAmount++; //TODO: Counter?
     }
@@ -109,6 +110,15 @@ contract AngelToken is ERC721Enumerable, Ownable {
         require(ownerOf(tokenId)==msg.sender, "Only owner of the token can exchange the token.");
         ///이 부분은 내부 호출해도 내부 호출 함수의 sender가 tokenID owner이면 상관없는 건지?
         require(exchangeable[tokenId]==true, "Already not exchangeable.");
+
+        uint16 counter = 0;
+        for(uint16 i=1; i<=totalSupply() && counter < exchangeRequestedAmount[tokenId]; i++) {
+            if(exchangeRequested[i] == tokenId) {
+                exchangeRequested[i] = 0;
+                counter++;
+            }
+        }
+
         exchangeable[tokenId]=false;
         exchangeRequestedAmount[tokenId]=0;
         exchangeableTokenAmount--; //TODO: Counter?

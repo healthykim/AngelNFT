@@ -3,7 +3,7 @@ import Web3 from "web3";
 import { ipfsImageHash } from "../contracts";
 import { AngelTokenContract } from "../contracts";
 
-function RequestQueue({ tokenId, account }) {
+function RequestQueue({ tokenId, account, setIsLoading }) {
   const [requestIds, setRequestIds] = useState([]);
 
   const getRequests = async () => {
@@ -17,14 +17,17 @@ function RequestQueue({ tokenId, account }) {
   }
 
   const onClickExchange = async (fromTokenId) => {
+    setIsLoading(true)
     try {
-      await AngelTokenContract.methods.approveExchange(fromTokenId, tokenId).send({ from: account });
+      const response = await AngelTokenContract.methods.approveExchange(fromTokenId, tokenId).send({ from: account });
+      console.log(response);
     }
     catch (error) {
       console.log(error);
     }
 
     getRequests();
+    setIsLoading(false);
   }
 
   useState(() => {

@@ -46,6 +46,12 @@ Usage
 uint16 exchangeableTokenAmount
 ```
 
+### exchangeRequestedAmount
+
+```solidity
+mapping(uint16 => uint256) exchangeRequestedAmount
+```
+
 ### MINT
 
 ```solidity
@@ -70,6 +76,7 @@ event EXCHANGE(address toOwner, address fromOwner, uint16 toTokenId, uint16 from
 struct TokenData {
   uint16 tokenId;
   string uri;
+  bool exchangeable;
 }
 ```
 
@@ -155,17 +162,6 @@ _Return `true` if NFT with given `tokenId` is exchangeable.
 Usage 
 - AngelTokenContract.methods.isExchangeable(`tokenId`).call()_
 
-### getExchangeableTokenData
-
-```solidity
-function getExchangeableTokenData() external view returns (struct AngelToken.TokenData[])
-```
-
-_Return list of exchangable tokens data
-
-Usage 
-- AngelTokenContract.methods.getExchangeableTokenData(`tokenId`).call()_
-
 ### requestExchange
 
 ```solidity
@@ -201,6 +197,17 @@ Requirements
 - `from` tokenId should have requested an exchange with `to` tokenId.
 - `to` tokenId must be exchangeable._
 
+### getExchangeableTokenData
+
+```solidity
+function getExchangeableTokenData() external view returns (struct AngelToken.TokenData[])
+```
+
+_Return list of exchangable tokens data
+
+Usage 
+- AngelTokenContract.methods.getExchangeableTokenData(`tokenId`).call()_
+
 ### getTokenDataOfOwner
 
 ```solidity
@@ -211,6 +218,12 @@ _Return list of TokenData owned by `owner`
 
 Usage 
 - AngelTokenContract.methods.getTokenDataOfOwner(`tokenId`).call()_
+
+### getRequestOfTokenId
+
+```solidity
+function getRequestOfTokenId(uint16 tokenId) external view returns (struct AngelToken.TokenData[])
+```
 
 ### tokenURI
 
@@ -230,23 +243,23 @@ Use this contract for donating/managing donation info.
 contract AngelToken angelToken
 ```
 
-### DonateInfo
-
-```solidity
-struct DonateInfo {
-  uint40 destinationId;
-  uint56 timeStamp;
-  address donator;
-  uint256 amount;
-}
-```
-
 ### DestinationInfo
 
 ```solidity
 struct DestinationInfo {
   address walletAddress;
   string name;
+}
+```
+
+### DonateInfo
+
+```solidity
+struct DonateInfo {
+  string destinationName;
+  uint56 timeStamp;
+  address donator;
+  uint256 amount;
 }
 ```
 

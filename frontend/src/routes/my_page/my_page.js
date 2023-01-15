@@ -72,15 +72,15 @@ function MyPage() {
         </div>
         <div className="border-b-2 border-gray-400 flex flex-row text-lg">
           <button onClick={() => { onClickTab(0) }} className="flex-1 text-center relative mx-8 overflow-hidden">
-            <div className={`absolute w-full h-full -z-20 opacity-50 rounded-t-md transition-transform duration-300 bg-ukyellow ${tab === 0 ? 'translate-y-0' : 'translate-y-10'}`}></div>
+            <div className={`absolute w-full h-full opacity-50 rounded-t-md transition-transform duration-300 bg-ukyellow ${tab === 0 ? 'translate-y-0' : 'translate-y-10'}`}></div>
             <p className="p-1">NFT Wallet</p>
           </button>
           <button onClick={() => { onClickTab(1) }} className="flex-1 text-center relative mx-8 overflow-hidden">
-            <div className={`absolute w-full h-full -z-20 opacity-50 rounded-t-md transition-transform duration-300 bg-ukyellow ${tab === 1 ? 'translate-y-0' : 'translate-y-10'}`}></div>
+            <div className={`absolute w-full h-full opacity-50 rounded-t-md transition-transform duration-300 bg-ukyellow ${tab === 1 ? 'translate-y-0' : 'translate-y-10'}`}></div>
             <p className="p-1">Exchange Request</p>
           </button>
           <button onClick={() => { onClickTab(2) }} className="flex-1 text-center relative mx-8 overflow-hidden">
-            <div className={`absolute w-full h-full -z-20 opacity-50 rounded-t-md transition-transform duration-300 bg-ukyellow ${tab === 2 ? 'translate-y-0' : 'translate-y-10'}`}></div>
+            <div className={`absolute w-full h-full opacity-50 rounded-t-md transition-transform duration-300 bg-ukyellow ${tab === 2 ? 'translate-y-0' : 'translate-y-10'}`}></div>
             <p className="p-1">Donate History</p>
           </button>
         </div>

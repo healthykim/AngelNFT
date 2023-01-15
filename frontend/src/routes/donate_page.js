@@ -171,7 +171,7 @@ function DonatePage() {
 
       {
         showAlert !== "" &&
-        <div className={`fixed font-medium duration-500 text-center left-0 right-0 z-50 ${showAlert && toast}`}>
+        <div className={`fixed font-medium duration-500 text-center left-0 right-0 ${showAlert && toast}`}>
           <div className="bg-red-300 inline-block py-4 px-24 rounded-2xl">{showAlert}</div>
         </div>
       }

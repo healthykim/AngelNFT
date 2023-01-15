@@ -9,14 +9,14 @@ function MyHistory({ account }) {
       if (account) {
         const history = await DonateContract.methods.getDonateHistory(account).call();
 
-        const tmpArr = [];
-        history.map((v) => {
+        const tmpArr = history.map((v) => {
           let time = new Date(v.timeStamp * 1000);
           let dateString = time.toISOString().slice(0, 10);
           let formattedDate = dateString.replace(/-/g, ".");
-          tmpArr.push({ timeStamp: formattedDate, amount: v.amount + " ETH", destinationId: v.destinationId })
-        })
-        console.log(tmpArr)
+          return ({ timeStamp: formattedDate, amount: v.amount + " ETH", destinationId: v.destinationId });
+        });
+        tmpArr.reverse();
+
         setDoateHistories(tmpArr);
       }
     }

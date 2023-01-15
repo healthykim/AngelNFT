@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { AngelTokenContract, DonateContract } from "../contracts"
+import { web3, AngelTokenContract, DonateContract } from "../contracts"
 import MintModal from "../components/modal/mint_modal";
 import LoadingModal from "../components/modal/loading_modal";
 import DonateOnlyModal from "../components/modal/donate_only_modal";
@@ -60,7 +60,7 @@ function DonatePage() {
       return;
     }
     let floatRegex = /^(\d+\.\d+|\d+)$/;
-    if(!floatRegex.test(ETH)){
+    if(!floatRegex.test(ETH) || ETH === '0'){
       // 혹시나 소수점 자리 제한이 있다면 위에 floatRegex를 적절하게 바꾸면 됩니다....
       // 그리고 다른 Alert를 띄우시면 될 듯.
       // 지금은 1.45 이나 1231과 같은 정규식입니다.
@@ -71,7 +71,7 @@ function DonatePage() {
     let newTokenId = '0';
     setIsLoading(true);
     try {
-      const response = await DonateContract.methods.donate(selectedDestinationId, isMint).send({ from: account });
+      const response = await DonateContract.methods.donate(selectedDestinationId, isMint).send({ from: account, value: web3.utils.toWei(ETH, "ether") });
       if(response.status && isMint) {
         const balanceSize = await AngelTokenContract.methods.balanceOf(account).call();
         newTokenId = await AngelTokenContract.methods.tokenOfOwnerByIndex(account, parseInt(balanceSize, 10) - 1).call();

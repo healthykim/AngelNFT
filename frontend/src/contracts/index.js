@@ -1092,7 +1092,7 @@ const DonateContractAbi = [
   }
 ];
 
-const web3 = new Web3(window.ethereum);
+export const web3 = new Web3(window.ethereum);
 export const AngelTokenContract = new web3.eth.Contract(
   AngelTokenContractAbi,
   AngelTokenContractAddress,

@@ -1,7 +1,7 @@
 import Web3 from 'web3';
 
-export const AngelTokenContractAddress = "0x735E93D6437D77ADAb4720934C6Bf82fDC3ddC61";
-export const DonateContractAddress = "0x5Dc3DAdc26df90ecc518F51Bd16Bea9e391D69b7";
+export const AngelTokenContractAddress = "0x0f9E7Ef45eD5d0425a35ECD384D2A0f625b60c15";
+export const DonateContractAddress = "0x60BEFfa8301Cb9B6c6f1e2BC10E5216A767BA19A";
 
 const AngelTokenContractAbi = [
   {

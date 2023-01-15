@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import ChooseNFTModal from "../components/modal/choose_nft_modal";
+import LoadingModal from "../components/modal/loading_modal";
+import { ipfsImageHash } from "../contracts";
 import { AngelTokenContract } from "../contracts";
 
 function Trade() {
   const [account, setAccount] = useState();
   const [showModal, setShowModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedTokenId, setSelectedTokenId] = useState();
   const [exchangeableTokens, setExchangeableTokens] = useState([]);
 
@@ -35,22 +38,26 @@ function Trade() {
     }
   }
 
-  const onClickImage = (tokenId) => {
+  const onClickImage = async(tokenId) => {
     try {
-      //const isOwnerToken = await AngelTokenContract.methods.ownerOf(tokenId) == account;
+      const owner = await AngelTokenContract.methods.ownerOf(tokenId).call()
+      const isOwnerToken = owner.toUpperCase() === account.toUpperCase();
+      if(isOwnerToken) {
+        alert("This NFT is already in your pocket.")
+        return;
+      }
     }
     catch (error) {
       console.log(error);
     }
     setShowModal(true);
     setSelectedTokenId(tokenId);
-
   }
 
   useEffect(()=>{    
     getAccount();
     getExchangeableTokenId();
-  }, [])
+  }, [isLoading])
 
   return (
     <div>
@@ -68,7 +75,7 @@ function Trade() {
                   key={i}
                   src={`https://gateway.ipfs.io/ipfs/${ipfsImageHash}/images/${token.tokenId}.png`}
                   className="rounded-lg 2xl:rounded-2xl cursor-pointer w-full"
-                  onClick={() => { setShowModal(true); setSelectedTokenId(token.tokenId); console.log(showModal); }}>
+                  onClick={() => { onClickImage(token.tokenId);}}>
                   </img>
                 )
               })
@@ -79,7 +86,8 @@ function Trade() {
           </div>
         </div>
       </div>
-      {showModal && <ChooseNFTModal setShowModal={setShowModal} toTokenId={selectedTokenId} />}
+      {showModal && <ChooseNFTModal setShowModal={setShowModal} toTokenId={selectedTokenId} account={account} setIsLoading={setIsLoading} />}
+      {isLoading && <LoadingModal></LoadingModal>}
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import {useState, useEffect, useRef} from "react";
 import {ipfsImageHash, AngelTokenContract} from "../../contracts";
 
-function ChooseNFTModal({ setShowModal, toTokenId }) {
+function ChooseNFTModal({ setShowModal, toTokenId, account, setIsLoading }) {
   const [tokenOfOwner, setTokenOfOwner] = useState([]);
 
   const modalRef = useRef(null);
@@ -12,7 +12,26 @@ function ChooseNFTModal({ setShowModal, toTokenId }) {
     }
   };
 
+  const getAccount = async () => {
+    try {
+        if (window.ethereum) {
+            const accounts = await window.ethereum.request({
+                method: 'eth_requestAccounts',
+            });
+            const tmpArr = await AngelTokenContract.methods.getTokenDataOfOwner(accounts[0]).call();
+            setTokenOfOwner(tmpArr);
+        }
+        else {
+            alert("Install Metamask!");
+        }
+    }
+    catch (error) {
+        console.error(error);
+    }
+  }
+
   useEffect(() => {
+    getAccount();
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -20,15 +39,14 @@ function ChooseNFTModal({ setShowModal, toTokenId }) {
   }, []);
 
 
-
-  const onClickImage = async(fromTokenId, toTokenId) => {
+  const onClickImage = async(fromTokenId) => {
     // TODO: healthyKim!!
     try {
-      const isDuplicatedRequest = (await AngelTokenContract.methods.exchangeRequested(fromTokenId).call() == toTokenId);
+      setIsLoading(true)
+      const isDuplicatedRequest = (await AngelTokenContract.methods.exchangeRequested(fromTokenId).call() === toTokenId);
       if(!isDuplicatedRequest) {
-        const response = await AngelTokenContract.methods.requestExchange(fromTokenId, toTokenId);
+        const response = await AngelTokenContract.methods.requestExchange(fromTokenId, toTokenId).send({from: account});
         if(!response.status) {
-          console.log(response);
           alert("Invalid operation");
         }
       }
@@ -39,6 +57,8 @@ function ChooseNFTModal({ setShowModal, toTokenId }) {
     catch (error) {
         console.error(error);
     }
+    setIsLoading(false)
+    setShowModal(false)
   }
 
   return (
@@ -50,7 +70,7 @@ function ChooseNFTModal({ setShowModal, toTokenId }) {
             tokenOfOwner.map((token, i) => {
               return (
                 !token.exchangeable &&
-                <img onClick={()=>{onClickImage(token.tokenId)}} className="h-4/6 rounded-md cursor-pointer" src={`https://gateway.ipfs.io/ipfs/${ipfsImageHash}/images/${token.tokenId}.png`} />
+                <img key={i} onClick={()=>{onClickImage(token.tokenId)}} className="h-4/6 rounded-md cursor-pointer" src={`https://gateway.ipfs.io/ipfs/${ipfsImageHash}/images/${token.tokenId}.png`} />
               );
             })
           }
@@ -59,3 +79,5 @@ function ChooseNFTModal({ setShowModal, toTokenId }) {
     </div>
   );
 }
+
+export default ChooseNFTModal;

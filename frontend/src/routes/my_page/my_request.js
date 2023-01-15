@@ -2,7 +2,8 @@ import React from "react"
 import NFTCard from "../../components/NFT_card";
 import RequestQueue from "../../components/request_queue";
 
-function MyRequest({ tokenIds, account }) {
+function MyRequest({ tokenIds, account, setIsLoading }) {
+
   return (
     <div className="px-8 py-6">
       <p className="text-2xl mb-6 ml-4">Your Exchangeable NFT</p>
@@ -13,9 +14,9 @@ function MyRequest({ tokenIds, account }) {
               return (
                 <div className="flex flex-row" key={i}>
                     <div>
-                      <NFTCard tokenId={tokenId[0]} metadata={tokenId[1]} isExchangeable={tokenId[2]} account={account} textPosi='bottom'/>
+                      <NFTCard tokenId={tokenId[0]} metadata={tokenId[1]} isExchangeable={tokenId[2]} account={account} textPosi='bottom' setIsLoading={setIsLoading}/>
                     </div>
-                    <RequestQueue tokenId={tokenId[0]} account={account} />
+                      <RequestQueue tokenId={tokenId[0]} account={account} setIsLoading={setIsLoading}/>
                   </div>
               );
             }

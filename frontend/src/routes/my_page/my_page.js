@@ -5,12 +5,15 @@ import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import MyRequest from "./my_request";
 import MyHistory from "./my_history";
 import MyNFT from "./my_nft";
+import LoadingModal from "../../components/modal/loading_modal";
 
 ///TODO: 페이지 -> 팝업
 function MyPage() {
   const [account, setAccount] = useState();
   const [tokenIds, setTokenIds] = useState([]);
   const [tab, setTab] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -33,11 +36,12 @@ function MyPage() {
   const getAccount = async () => {
     try {
       if (window.ethereum) {
-        const accounts = await window.ethereum.request({
+        let accounts = await window.ethereum.request({
           method: 'eth_requestAccounts',
         });
         setAccount(accounts[0]);
-        const tmpArr = await AngelTokenContract.methods.getTokenDataOfOwner(accounts[0]).call();
+        let tmpArr = await AngelTokenContract.methods.getTokenDataOfOwner(accounts[0]).call();
+        console.log(tmpArr);
         setTokenIds(tmpArr);
       }
       else {
@@ -50,9 +54,13 @@ function MyPage() {
   }
 
   useEffect(() => {
-    console.log('my page init')
+    if (window.ethereum) {
+      window.ethereum.on("accountsChanged", () => {
+        window.location.reload();
+      });
+    }
     getAccount();
-  }, [])
+  }, [isLoading])
 
   return (
     <div>
@@ -77,11 +85,12 @@ function MyPage() {
           </button>
         </div>
         <Routes>
-          <Route path="my_nft" element={<MyNFT tokenIds={tokenIds} account={account}></MyNFT>}></Route>
-          <Route path="exchange_nft" element={<MyRequest tokenIds={tokenIds} account={account}></MyRequest>}></Route>
+          <Route path="my_nft" element={<MyNFT tokenIds={tokenIds} account={account} setIsLoading={setIsLoading}></MyNFT>}></Route>
+          <Route path="exchange_nft" element={<MyRequest tokenIds={tokenIds} account={account} setIsLoading={setIsLoading}></MyRequest>}></Route>
           <Route path="donate_history" element={<MyHistory account={account}></MyHistory>}></Route>
         </Routes>
       </div>
+      {isLoading && <LoadingModal></LoadingModal>}
     </div>
   );
 }

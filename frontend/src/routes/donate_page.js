@@ -1,19 +1,20 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { AngelTokenContract, DonateContract } from "../contracts"
 import MintModal from "../components/modal/mint_modal";
 import LoadingModal from "../components/modal/loading_modal";
-
+import DonateOnlyModal from "../components/modal/donate_only_modal";
 
 function DonatePage() {
   const [account, setAccount] = useState("");
   const [destinations, setDestinations] = useState([]);
   const [selectedDestinationId, setSelectedDestinationId] = useState(null);
   const [tokenId, setTokenId] = useState("");
-  const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [showAlert, setShowAlert] = useState("");
+  const [showMintModal, setShowMintModal] = useState(false);
+  const [showDonateOnlyModal, setShowDonateOnlyModal] = useState(false);
 
+  const [showAlert, setShowAlert] = useState("");
   const [toast, setToast] = useState("");
 
   useEffect(() => {
@@ -67,17 +68,20 @@ function DonatePage() {
         newTokenId = await AngelTokenContract.methods.tokenOfOwnerByIndex(account, parseInt(balanceSize.length, 10) - 1).call();
       }
     } catch (error) {
-      console.error(error);
+      setIsLoading(false);
+      return;
     }
     setIsLoading(false);
 
-    if (!isMint && newTokenId === '0') {
+    if (!isMint) {
+
+      setShowDonateOnlyModal(true);
       return;
     }
 
     // TODO: isMint랑 성공유무에 따라서 보여주는 Modal 분기
     setTokenId(newTokenId);
-    setShowModal(true);
+    setShowMintModal(true);
     return;
   }
 
@@ -98,9 +102,6 @@ function DonatePage() {
 
   return (
     <>
-      {showModal && (
-        <MintModal setShowModal={setShowModal} tokenId={tokenId}></MintModal>
-      )}
       <div className="px-24 xl:px-48">
         <div className="h-16"></div>
         <div className="flex flex-col items-stretch text-left pt-4 gap-8">
@@ -149,6 +150,16 @@ function DonatePage() {
         <div className={`fixed font-medium duration-500 text-center left-0 right-0 ${showAlert && toast}`}>
           <div className="bg-red-300 inline-block py-4 px-24 rounded-2xl">{showAlert}</div>
         </div>
+      }
+
+      {
+        showMintModal &&
+        <MintModal setShowMintModal={setShowMintModal} tokenId={tokenId}></MintModal>
+      }
+
+      {
+        showDonateOnlyModal &&
+        <DonateOnlyModal setShowDonateOnlyModal={setShowDonateOnlyModal}></DonateOnlyModal>
       }
     </>
   );

@@ -1,7 +1,7 @@
 import Web3 from 'web3';
 
-export const AngelTokenContractAddress = "0x0f9E7Ef45eD5d0425a35ECD384D2A0f625b60c15";
-export const DonateContractAddress = "0x60BEFfa8301Cb9B6c6f1e2BC10E5216A767BA19A";
+export const AngelTokenContractAddress = "0x09263d2B3401C694c000F5dC8068B59ffbaD2796";
+export const DonateContractAddress = "0x62CbaC93af820d4cCc242615B98acf123CF2fD56";
 
 const AngelTokenContractAbi = [
   {
@@ -925,7 +925,6 @@ const DonateContractAbi = [
         "internalType": "bool",
         "name": "isMint",
         "type": "bool"
-
       }
     ],
     "name": "donate",
@@ -950,9 +949,9 @@ const DonateContractAbi = [
     "name": "donateInfoList",
     "outputs": [
       {
-        "internalType": "uint40",
-        "name": "destinationId",
-        "type": "uint40"
+        "internalType": "string",
+        "name": "destinationName",
+        "type": "string"
       },
       {
         "internalType": "uint56",
@@ -1011,9 +1010,9 @@ const DonateContractAbi = [
       {
         "components": [
           {
-            "internalType": "uint40",
-            "name": "destinationId",
-            "type": "uint40"
+            "internalType": "string",
+            "name": "destinationName",
+            "type": "string"
           },
           {
             "internalType": "uint56",

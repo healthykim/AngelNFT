@@ -154,6 +154,47 @@ describe("AngelToken", function() {
                 assert(await angelToken.isExchangeable(toTokenId) == false);
                 assert(await angelToken.isExchangeable(fromTokenId) == false);
             })
+
+            it("Multiple Exchange", async function() {
+                await angelToken.connect(accounts[3]).mint(accounts[3].getAddress());
+                await angelToken.connect(accounts[4]).mint(accounts[4].getAddress());
+
+                const tokenOfThree = await angelToken.tokenOfOwnerByIndex(await accounts[3].getAddress(), 0);
+                const tokenOfFour = await angelToken.tokenOfOwnerByIndex(await accounts[4].getAddress(), 0);
+
+                await angelToken.connect(accounts[3]).requestExchange(tokenOfThree, toTokenId);
+                await angelToken.connect(accounts[4]).requestExchange(tokenOfFour, toTokenId);
+                await angelToken.connect(accounts[2]).approveExchange(fromTokenId, toTokenId);
+                
+                let requests = await angelToken.getRequestOfTokenId(toTokenId);
+                assert.equal(requests.length, 0);
+
+
+
+                await angelToken.connect(accounts[2]).setExchangeableToken(fromTokenId);
+                await angelToken.connect(accounts[1]).requestExchange(toTokenId, fromTokenId);
+                await angelToken.connect(accounts[2]).approveExchange(toTokenId, fromTokenId);
+
+                
+                assert.equal(await angelToken.ownerOf(fromTokenId), await accounts[1].getAddress())
+                assert.equal(await angelToken.ownerOf(toTokenId), await accounts[2].getAddress())
+
+                requests = await angelToken.getRequestOfTokenId(fromTokenId);
+                assert.equal(requests.length, 0);
+
+                await angelToken.connect(accounts[2]).setExchangeableToken(toTokenId);
+                await angelToken.connect(accounts[3]).requestExchange(tokenOfThree, toTokenId);
+
+
+                requests = await angelToken.getRequestOfTokenId(toTokenId);
+                assert.equal(requests.length, 1);
+
+                await angelToken.connect(accounts[4]).requestExchange(tokenOfFour, toTokenId);
+                await angelToken.connect(accounts[2]).approveExchange(tokenOfFour, toTokenId);
+
+                requests = await angelToken.getRequestOfTokenId(toTokenId);
+                assert.equal(requests.length, 0);
+            })
         })
     })
 })

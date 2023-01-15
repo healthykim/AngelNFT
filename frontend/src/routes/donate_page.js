@@ -17,6 +17,8 @@ function DonatePage() {
   const [showAlert, setShowAlert] = useState("");
   const [toast, setToast] = useState("");
 
+  const [ETH, setETH] = useState("");
+
   useEffect(() => {
     getAccount();
     getDestinations();
@@ -57,7 +59,14 @@ function DonatePage() {
       setShowAlert("Select Destination!");
       return;
     }
-
+    let floatRegex = /^(\d+\.\d+|\d+)$/;
+    if(!floatRegex.test(ETH)){
+      // 혹시나 소수점 자리 제한이 있다면 위에 floatRegex를 적절하게 바꾸면 됩니다....
+      // 그리고 다른 Alert를 띄우시면 될 듯.
+      // 지금은 1.45 이나 1231과 같은 정규식입니다.
+      setShowAlert("Check your input ETH");
+      return;
+    }
     /// TODO: Contract Donate
     let newTokenId = '0';
     setIsLoading(true);
@@ -101,6 +110,11 @@ function DonatePage() {
     return () => clearTimeout(timer);
   }, [showAlert])
 
+  const onETHChange = (e) => {
+    let result = e.target.value.replace(/[^0-9.]/g, "");
+    setETH(result);
+  };
+
   return (
     <>
       <div className="px-24 xl:px-48">
@@ -130,7 +144,16 @@ function DonatePage() {
                 })
               }
             </form>
-            <div className="flex gap-8 justify-start mt-4 mb-16">
+            <div className="flex flex-row items-center">
+              <input 
+                type="text" 
+                value={ETH} 
+                onChange={onETHChange}
+                className="border-2 rounded-md text-end pr-1"
+              />
+              <p className="pl-1">ETH</p>
+            </div>
+            <div className="flex gap-8 justify-start mt-2 mb-16">
               <button onClick={() => { onClickDonate(true) }} className="cursor-pointer bg-gray-300 px-4 py-2 rounded-lg">
                 Donate with Mint
               </button>
@@ -148,7 +171,7 @@ function DonatePage() {
 
       {
         showAlert !== "" &&
-        <div className={`fixed font-medium duration-500 text-center left-0 right-0 ${showAlert && toast}`}>
+        <div className={`fixed font-medium duration-500 text-center left-0 right-0 z-50 ${showAlert && toast}`}>
           <div className="bg-red-300 inline-block py-4 px-24 rounded-2xl">{showAlert}</div>
         </div>
       }

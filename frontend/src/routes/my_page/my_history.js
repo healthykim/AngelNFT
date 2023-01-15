@@ -7,13 +7,13 @@ function MyHistory({ account }) {
   const getDonateHistory = async () => {
     try {
       if (account) {
-        const history = await DonateContract.methods.getDonateHistory(account).call();
+        const histories = await DonateContract.methods.getDonateHistory(account).call();
 
-        const tmpArr = history.map((v) => {
-          let time = new Date(v.timeStamp * 1000);
+        const tmpArr = histories.map((history) => {
+          let time = new Date(history.timeStamp * 1000);
           let dateString = time.toISOString().slice(0, 10);
           let formattedDate = dateString.replace(/-/g, ".");
-          return ({ timeStamp: formattedDate, amount: v.amount + " ETH", destinationId: v.destinationId });
+          return ({ timeStamp: formattedDate, amount: history.amount + " ETH", destinationId: history.destinationName });
         });
         tmpArr.reverse();
 

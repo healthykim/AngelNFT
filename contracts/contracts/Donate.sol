@@ -9,16 +9,16 @@ contract Donate is Ownable {
     AngelToken public angelToken;
 
 
-    struct DonateInfo {
-        uint40 destinationId;
-        uint56 timeStamp;
-        address donator;
-        uint256 amount;
-    }
-
     struct DestinationInfo {
         address walletAddress;
         string name;
+    }
+
+    struct DonateInfo {
+        string destinationName;
+        uint56 timeStamp;
+        address donator;
+        uint256 amount;
     }
 
     /** 
@@ -67,7 +67,7 @@ contract Donate is Ownable {
         require(destinations.length > destinationId, "Invalid destination Id");
         payable(destinations[destinationId].walletAddress).transfer(msg.value);
 
-        donateInfoList.push(DonateInfo(uint40(destinationId), uint32(block.timestamp), msg.sender, msg.value));
+        donateInfoList.push(DonateInfo(destinations[destinationId].name, uint32(block.timestamp), msg.sender, msg.value));
         numOfDonate[msg.sender]++;
         
         tokenId = isMint ? angelToken.mint(msg.sender) : 0;
@@ -90,7 +90,7 @@ contract Donate is Ownable {
                 info[counter].donator = donateInfoList[i].donator;
                 info[counter].timeStamp = donateInfoList[i].timeStamp;
                 info[counter].amount = donateInfoList[i].amount;
-                info[counter].destinationId = donateInfoList[i].destinationId;
+                info[counter].destinationName = donateInfoList[i].destinationName;
                 counter++;
             }
         }

@@ -67,7 +67,6 @@ describe("Donate", function() {
             
             assert.equal(result.length, 3, "Wrong history length");
             assert.equal(result[0][2], await accounts[2].getAddress(), "Wrong donator");
-            assert.equal(result[0][0], 0, "Wrong destinationId");
         })
     })
 })

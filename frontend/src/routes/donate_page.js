@@ -71,7 +71,7 @@ function DonatePage() {
     let newTokenId = '0';
     setIsLoading(true);
     try {
-      const response = await DonateContract.methods.donate(selectedDestinationId, isMint).send({ from: account, value: web3.utils.toWei(parseFloat(ETH), "ether") });
+      const response = await DonateContract.methods.donate(selectedDestinationId, isMint).send({ from: account, value: web3.utils.toWei(`${parseFloat(ETH)}`, "ether") });
       if(response.status && isMint) {
         const balanceSize = await AngelTokenContract.methods.balanceOf(account).call();
         newTokenId = await AngelTokenContract.methods.tokenOfOwnerByIndex(account, parseInt(balanceSize, 10) - 1).call();

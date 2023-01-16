@@ -1,6 +1,23 @@
 import NFTCard from "../../components/NFT_card";
+import {Link} from "react-router-dom";
+import { useState } from "react";
 
 function MyNFT({ tokenIds, account, setIsLoading }) {
+
+  if(tokenIds.length === 0){
+    return (
+      <div>
+        <div className="py-8 flex flex-col items-center gap-6">
+        <p className="text-center text-3xl">You haven't donated yet!</p>
+        <Link to='/donate'>
+          <div className="bg-ukblue py-2 px-12 m-auto rounded-xl text-2xl text-ukyellow font-semibold inline-block">
+            Donate Now
+          </div>
+        </Link>
+      </div>
+      </div>
+    );
+  }
 
   return (
     <div>

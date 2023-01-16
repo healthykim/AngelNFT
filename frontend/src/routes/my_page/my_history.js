@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { DonateContract } from "../../contracts";
+import { web3, DonateContract } from "../../contracts";
 
 function MyHistory({ account }) {
   const [donateHistories, setDoateHistories] = useState([]);
@@ -13,7 +13,7 @@ function MyHistory({ account }) {
           let time = new Date(history.timeStamp * 1000);
           let dateString = time.toISOString().slice(0, 10);
           let formattedDate = dateString.replace(/-/g, ".");
-          return ({ timeStamp: formattedDate, amount: history.amount + " ETH", destinationId: history.destinationName });
+          return ({ timeStamp: formattedDate, amount: web3.utils.fromWei(history.amount, "ether") + " ETH", destinationId: history.destinationName });
         });
         tmpArr.reverse();
 

@@ -3,7 +3,7 @@ import loadingLottie from "../../loading_lottie.json";
 
 function LoadingModal() {
   return (
-    <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-700 bg-opacity-50">
+    <div className="fixed z-50 top-0 left-0 w-full h-full flex items-center justify-center bg-gray-700 bg-opacity-50">
       <div className="fixed">
         <Lottie className="" animationData={loadingLottie}></Lottie>
       </div>

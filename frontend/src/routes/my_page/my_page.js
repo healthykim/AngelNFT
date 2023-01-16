@@ -9,7 +9,7 @@ import LoadingModal from "../../components/modal/loading_modal";
 
 ///TODO: 페이지 -> 팝업
 function MyPage() {
-  const [account, setAccount] = useState();
+  const [account, setAccount] = useState('Loading...');
   const [tokenIds, setTokenIds] = useState([]);
   const [tab, setTab] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -89,7 +89,7 @@ function MyPage() {
         </div>
         <Routes>
           <Route path="my_nft" element={<MyNFT tokenIds={tokenIds} account={account} setIsLoading={setIsLoading}></MyNFT>}></Route>
-          <Route path="exchange_nft" element={<MyRequest tokenIds={tokenIds} account={account} setIsLoading={setIsLoading}></MyRequest>}></Route>
+          <Route path="exchange_nft" element={<MyRequest tokenIds={tokenIds} account={account} setIsLoading={setIsLoading} onClickTab0={()=>{onClickTab(0)}}></MyRequest>}></Route>
           <Route path="donate_history" element={<MyHistory account={account}></MyHistory>}></Route>
         </Routes>
       </div>

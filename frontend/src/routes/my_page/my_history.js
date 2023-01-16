@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react"
 import { web3, DonateContract } from "../../contracts";
+import { Link } from "react-router-dom";
 
 function MyHistory({ account }) {
   const [donateHistories, setDoateHistories] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const getDonateHistory = async () => {
     try {
@@ -16,8 +18,8 @@ function MyHistory({ account }) {
           return ({ timeStamp: formattedDate, amount: web3.utils.fromWei(history.amount, "ether") + " ETH", destinationId: history.destinationName });
         });
         tmpArr.reverse();
-
         setDoateHistories(tmpArr);
+        setIsLoading(false);
       }
     }
     catch (error) {
@@ -29,10 +31,22 @@ function MyHistory({ account }) {
     getDonateHistory();
   }, [account])
 
+  if (donateHistories.length === 0 && !isLoading) {
+    return (
+      <div className="py-8 flex flex-col items-center gap-6">
+        <p className="text-center text-3xl">You haven't donated yet!</p>
+        <Link to='/donate'>
+          <div className="bg-ukblue py-2 px-12 m-auto rounded-xl text-2xl text-ukyellow font-semibold inline-block">
+            Donate Now
+          </div>
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <>
-      <table className="table-auto w-full border-collapse border-y border-gray-500 mb-16">
+      <table className="table-fixed w-full border-collapse border-y border-gray-500 mb-16">
         <thead>
           <tr>
             <th className="text-start border-y border-gray-500 py-4 pl-2 ">Date</th>

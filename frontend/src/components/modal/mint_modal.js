@@ -1,7 +1,7 @@
 import {useRef, useState, useEffect} from "react";
 import {ipfsImageHash} from "../../contracts";
 
-function MintModal({ setShowModal, tokenId }) {
+function MintModal({ setShowMintModal, tokenId }) {
     const modalRef = useRef(null);
     const imgRef = useRef(null);
     const [modalFade, setModalFade] = useState("opacity-0");
@@ -35,7 +35,7 @@ function MintModal({ setShowModal, tokenId }) {
         setTextHero(true);
         setTimeout(() => {
           isAnimating = false;
-          setShowModal(false);
+          setShowMintModal(false);
         }, 1100);
       }
     };
@@ -53,7 +53,7 @@ function MintModal({ setShowModal, tokenId }) {
     }, []);
   
     return (
-      <div className="fixed top-0 left-0 w-full h-full py-8 flex items-center justify-center" onClick={() => { }}>
+      <div className="z-50 fixed top-0 left-0 w-full h-full py-8 flex items-center justify-center" onClick={() => { }}>
         <div style={modalHero} ref={modalRef}
           className={`relative flex flex-col text-center items-center rounded-2xl duration-500 ${modalFade} bg-white drop-shadow-2xl`}
         >

@@ -72,16 +72,19 @@ function MyPage() {
         </div>
         <div className="border-b-2 border-gray-400 flex flex-row text-lg">
           <button onClick={() => { onClickTab(0) }} className="flex-1 text-center relative mx-8 overflow-hidden">
-            <div className={`absolute w-full h-full opacity-50 rounded-t-md transition-transform duration-300 bg-ukyellow ${tab === 0 ? 'translate-y-0' : 'translate-y-10'}`}></div>
-            <p className="p-1">NFT Wallet</p>
+            <div className={`absolute top-0 w-full h-full opacity-50 rounded-t-md transition-transform duration-300 bg-ukyellow ${tab === 0 ? 'translate-y-0' : 'translate-y-9'}`}></div>
+            <p className="absolute top-0 left-0 text-center w-full py-2">NFT Wallet</p>
+            <p className="py-2 invisible">NFT Wallet</p>
           </button>
           <button onClick={() => { onClickTab(1) }} className="flex-1 text-center relative mx-8 overflow-hidden">
-            <div className={`absolute w-full h-full opacity-50 rounded-t-md transition-transform duration-300 bg-ukyellow ${tab === 1 ? 'translate-y-0' : 'translate-y-10'}`}></div>
-            <p className="p-1">Exchange Request</p>
+          <div className={`absolute top-0 w-full h-full opacity-50 rounded-t-md transition-transform duration-300 bg-ukyellow ${tab === 1 ? 'translate-y-0' : 'translate-y-9'}`}></div>
+            <p className="absolute top-0 left-0 text-center w-full py-2">Exchange Request</p>
+            <p className="py-2 invisible">Exchange Request</p>
           </button>
           <button onClick={() => { onClickTab(2) }} className="flex-1 text-center relative mx-8 overflow-hidden">
-            <div className={`absolute w-full h-full opacity-50 rounded-t-md transition-transform duration-300 bg-ukyellow ${tab === 2 ? 'translate-y-0' : 'translate-y-10'}`}></div>
-            <p className="p-1">Donate History</p>
+          <div className={`absolute top-0 w-full h-full opacity-50 rounded-t-md transition-transform duration-300 bg-ukyellow ${tab === 2 ? 'translate-y-0' : 'translate-y-9'}`}></div>
+            <p className="absolute top-0 left-0 text-center w-full py-2">Donate History</p>
+            <p className="py-2 invisible">Donate History</p>
           </button>
         </div>
         <Routes>

@@ -26,6 +26,27 @@ function MainPage() {
     { 'currency': 'ETH and USDT (ERC-20)', 'address': '0x165CD37b4C644C2921454429E7F9358d18A45e14' },
     { 'currency': 'DOT', 'address': '1x8aa2N2Ar9SQweJv9vsuZn3WYDHu7gMQu1RePjZuBe33Hv' },
   ];
+
+  const [isCopied, setIsCopied] = useState(Array(ukWalletAddresses.length).fill(false));
+
+  const onWalletAddressClick = async (i) => {
+    try {
+      await navigator.clipboard.writeText(ukWalletAddresses[i].address);
+      let tmpArr = Array(ukWalletAddresses.length).fill(false);
+      tmpArr[i] = true;
+      setIsCopied(tmpArr);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(()=>{
+    let timer = setTimeout(()=>{
+      setIsCopied(Array(ukWalletAddresses.length).fill(false));
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [isCopied]);
+
   return (
     <div className="bg-ukblue w-full h-64 ">
       <div className="grid text-center h-full content-center">
@@ -58,7 +79,18 @@ function MainPage() {
             <ul className="pl-8 list-disc list-outside leading-8 pt-2 text-lg">
               {ukWalletAddresses.map((ukWalletAddress, i) => {
                 return (
-                  <li key={i}><span>{ukWalletAddress.currency} - </span><span className="cursor-pointer">{ukWalletAddress.address}</span></li>
+                  <li key={i}>
+                    <span>{ukWalletAddress.currency} - </span>
+                    <div className="inline-block relative">
+                      {
+                        isCopied[i] &&
+                        <div className={`absolute flex flex-col justify-center -right-20 top-0 h-full px-2 py-1 bg-ukblue bg-opacity-50 rounded-md`}>
+                          <p className="text-sm">Copied!</p>
+                        </div>
+                      }
+                      <span onClick={() => { onWalletAddressClick(i) }} className="cursor-pointer">{ukWalletAddress.address}</span>
+                    </div>
+                  </li>
                 );
               })}
             </ul>

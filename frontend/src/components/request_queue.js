@@ -17,9 +17,12 @@ function RequestQueue({ tokenId, account, setIsLoading }) {
   }
 
   const onClickExchange = async (fromTokenId) => {
-    setIsLoading(true)
     try {
-      const response = await AngelTokenContract.methods.approveExchange(fromTokenId, tokenId).send({ from: account });
+      const response = await AngelTokenContract
+                              .methods
+                              .approveExchange(fromTokenId, tokenId)
+                              .send({ from: account })
+                              .on('transactionHash', ()=>{setIsLoading(true)});
       console.log(response);
     }
     catch (error) {

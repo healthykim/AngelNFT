@@ -4,13 +4,11 @@ import { Link } from "react-router-dom";
 
 function MyHistory({ account }) {
   const [donateHistories, setDoateHistories] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
 
   const getDonateHistory = async () => {
     try {
       if (account) {
         const histories = await DonateContract.methods.getDonateHistory(account).call();
-
         const tmpArr = histories.map((history) => {
           let time = new Date(history.timeStamp * 1000);
           let dateString = time.toISOString().slice(0, 10);
@@ -19,7 +17,6 @@ function MyHistory({ account }) {
         });
         tmpArr.reverse();
         setDoateHistories(tmpArr);
-        setIsLoading(false);
       }
     }
     catch (error) {
@@ -31,7 +28,7 @@ function MyHistory({ account }) {
     getDonateHistory();
   }, [account])
 
-  if (donateHistories.length === 0 && !isLoading) {
+  if (donateHistories.length === 0) {
     return (
       <div className="py-8 flex flex-col items-center gap-6">
         <p className="text-center text-3xl">You haven't donated yet!</p>

@@ -42,10 +42,13 @@ function ChooseNFTModal({ setShowModal, toTokenId, account, setIsLoading }) {
   const onClickImage = async(fromTokenId) => {
     // TODO: healthyKim!!
     try {
-      setIsLoading(true)
       const isDuplicatedRequest = (await AngelTokenContract.methods.exchangeRequested(fromTokenId).call() === toTokenId);
       if(!isDuplicatedRequest) {
-        const response = await AngelTokenContract.methods.requestExchange(fromTokenId, toTokenId).send({from: account});
+        const response = await AngelTokenContract
+                                .methods
+                                .requestExchange(fromTokenId, toTokenId)
+                                .send({from: account})
+                                .on('transactionHash', ()=>{setIsLoading(true)});
         if(!response.status) {
           alert("Invalid operation");
         }

@@ -1,7 +1,7 @@
 import {useState, useEffect, useRef} from "react";
 import {ipfsImageHash, AngelTokenContract} from "../../contracts";
 
-function ChooseNFTModal({ setShowModal, toTokenId, account, setIsLoading }) {
+function ChooseNFTModal({ setShowModal, toTokenId, account, setIsLoading, setShowLoadingText }) {
   const [tokenOfOwner, setTokenOfOwner] = useState([]);
 
   const modalRef = useRef(null);
@@ -40,7 +40,7 @@ function ChooseNFTModal({ setShowModal, toTokenId, account, setIsLoading }) {
 
 
   const onClickImage = async(fromTokenId) => {
-    // TODO: healthyKim!!
+    setIsLoading(true);
     try {
       const isDuplicatedRequest = (await AngelTokenContract.methods.exchangeRequested(fromTokenId).call() === toTokenId);
       if(!isDuplicatedRequest) {
@@ -48,7 +48,7 @@ function ChooseNFTModal({ setShowModal, toTokenId, account, setIsLoading }) {
                                 .methods
                                 .requestExchange(fromTokenId, toTokenId)
                                 .send({from: account})
-                                .on('transactionHash', ()=>{setIsLoading(true)});
+                                .on('transactionHash', ()=>{setShowLoadingText(true)});
         if(!response.status) {
           alert("Invalid operation");
         }
@@ -60,8 +60,9 @@ function ChooseNFTModal({ setShowModal, toTokenId, account, setIsLoading }) {
     catch (error) {
         console.error(error);
     }
-    setIsLoading(false)
-    setShowModal(false)
+    setIsLoading(false);
+    setShowModal(false);
+    setShowLoadingText(false);
   }
 
   return (

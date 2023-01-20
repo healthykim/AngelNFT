@@ -2,7 +2,7 @@ import NFTCard from "../../components/NFT_card";
 import {Link} from "react-router-dom";
 import { useState } from "react";
 
-function MyNFT({ tokenIds, account, setIsLoading }) {
+function MyNFT({ tokenIds, account, setIsLoading, setShowLoadingText }) {
 
   if(tokenIds.length === 0){
     return (
@@ -25,7 +25,7 @@ function MyNFT({ tokenIds, account, setIsLoading }) {
         {tokenIds.length !== 0 &&
           tokenIds.map((v, i) => {
             return (
-              <NFTCard key={i} tokenId={v[0]} metadata={v[1]} isExchangeable={v[2]} account={account} setIsLoading={setIsLoading} />
+              <NFTCard key={i} tokenId={v[0]} metadata={v[1]} isExchangeable={v[2]} account={account} setIsLoading={setIsLoading} setShowLoadingText={setShowLoadingText} />
             )
           })
         }

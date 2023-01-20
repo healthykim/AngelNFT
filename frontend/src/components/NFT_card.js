@@ -2,37 +2,41 @@ import React, { useState } from "react";
 import { ipfsImageHash } from "../contracts"
 import { AngelTokenContract } from "../contracts";
 
-function NFTCard({ tokenId, isExchangeable, metadata, account, setIsLoading}) {
+function NFTCard({ tokenId, isExchangeable, metadata, account, setIsLoading, setShowLoadingText}) {
   const [exchangeable, setExchangeable] = useState(isExchangeable);
 
   const onClickSetExchange = async (tokenId) => {
+    setIsLoading(true);
     try {
       await AngelTokenContract
             .methods
             .setExchangeableToken(tokenId)
             .send({ from: account })
-            .on('transactionHash', ()=>{setIsLoading(true)});
+            .on('transactionHash', ()=>{setShowLoadingText(true)});
       setExchangeable(!exchangeable);
     }
     catch (error) {
       console.log(error)
     }
     setIsLoading(false);
+    setShowLoadingText(false);
   }
 
   const onClickReSetExchange = async (tokenId) => {
+    setIsLoading(true);
     try {
       await AngelTokenContract
             .methods
             .resetExchangeableToken(tokenId)
             .send({ from: account })
-            .on('transactionHash', ()=>{setIsLoading(true)});
+            .on('transactionHash', ()=>{setShowLoadingText(true)});
       setExchangeable(!exchangeable);
     }
     catch (error) {
       console.log(error)
     }
     setIsLoading(false);
+    setShowLoadingText(false);
   }
 
 

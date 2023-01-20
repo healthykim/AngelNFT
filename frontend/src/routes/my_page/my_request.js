@@ -3,7 +3,7 @@ import NFTCard from "../../components/NFT_card";
 import RequestQueue from "../../components/request_queue";
 import { Link } from "react-router-dom";
 
-function MyRequest({ tokenIds, account, setIsLoading, onClickTab0}) {
+function MyRequest({ tokenIds, account, setIsLoading, onClickTab0, setShowLoadingText}) {
 
   if (tokenIds.length === 0) {
     return (
@@ -24,9 +24,9 @@ function MyRequest({ tokenIds, account, setIsLoading, onClickTab0}) {
               return (
                 <div className="flex flex-row" key={i}>
                   <div>
-                    <NFTCard tokenId={tokenId[0]} metadata={tokenId[1]} isExchangeable={tokenId[2]} account={account} textPosi='bottom' setIsLoading={setIsLoading} />
+                    <NFTCard tokenId={tokenId[0]} metadata={tokenId[1]} isExchangeable={tokenId[2]} account={account} textPosi='bottom' setIsLoading={setIsLoading} setShowLoadingText={setShowLoadingText}/>
                   </div>
-                  <RequestQueue tokenId={tokenId[0]} account={account} setIsLoading={setIsLoading} />
+                  <RequestQueue tokenId={tokenId[0]} account={account} setIsLoading={setIsLoading} setShowLoadingText={setShowLoadingText}/>
                 </div>
               );
             }

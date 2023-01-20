@@ -10,6 +10,7 @@ function DonatePage() {
   const [selectedDestinationId, setSelectedDestinationId] = useState(null);
   const [tokenId, setTokenId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showLoadingText, setShowLoadingText] = useState(false);
 
   const [showMintModal, setShowMintModal] = useState(false);
   const [showDonateOnlyModal, setShowDonateOnlyModal] = useState(false);
@@ -69,11 +70,12 @@ function DonatePage() {
     }
     /// TODO: Contract Donate
     let newTokenId = '0';
+    setIsLoading(true);
     try {
       const response = await DonateContract
                               .methods.donate(selectedDestinationId, isMint)
                               .send({ from: account, value: web3.utils.toWei(`${parseFloat(ETH)}`, "ether") })
-                              .on('transactionHash', ()=>{setIsLoading(true)});
+                              .on('transactionHash', ()=>{setShowLoadingText(true)});
       if(response.status && isMint) {
         const balanceSize = await AngelTokenContract.methods.balanceOf(account).call();
         newTokenId = await AngelTokenContract.methods.tokenOfOwnerByIndex(account, parseInt(balanceSize, 10) - 1).call();
@@ -83,9 +85,9 @@ function DonatePage() {
       return;
     }
     setIsLoading(false);
+    setShowLoadingText(false);
 
     if (!isMint) {
-
       setShowDonateOnlyModal(true);
       return;
     }
@@ -169,7 +171,7 @@ function DonatePage() {
       </div>
       {
         isLoading &&
-        <LoadingModal></LoadingModal>
+        <LoadingModal showLoadingText={showLoadingText}></LoadingModal>
       }
 
       {

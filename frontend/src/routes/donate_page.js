@@ -60,7 +60,7 @@ function DonatePage() {
       return;
     }
     let floatRegex = /^(\d+\.\d+|\d+)$/;
-    if(!floatRegex.test(ETH) || parseFloat(ETH) === 0){
+    if(!floatRegex.test(ETH)){
       // 혹시나 소수점 자리 제한이 있다면 위에 floatRegex를 적절하게 바꾸면 됩니다....
       // 그리고 다른 Alert를 띄우시면 될 듯.
       // 지금은 1.45 이나 1231과 같은 정규식입니다.
@@ -69,16 +69,17 @@ function DonatePage() {
     }
     /// TODO: Contract Donate
     let newTokenId = '0';
-    setIsLoading(true);
     try {
-      const response = await DonateContract.methods.donate(selectedDestinationId, isMint).send({ from: account, value: web3.utils.toWei(`${parseFloat(ETH)}`, "ether") });
+      const response = await DonateContract
+                              .methods.donate(selectedDestinationId, isMint)
+                              .send({ from: account, value: web3.utils.toWei(`${parseFloat(ETH)}`, "ether") })
+                              .on('transactionHash', ()=>{setIsLoading(true)});
       if(response.status && isMint) {
         const balanceSize = await AngelTokenContract.methods.balanceOf(account).call();
         newTokenId = await AngelTokenContract.methods.tokenOfOwnerByIndex(account, parseInt(balanceSize, 10) - 1).call();
         console.log(newTokenId);
       }
     } catch (error) {
-      setIsLoading(false);
       return;
     }
     setIsLoading(false);
@@ -121,12 +122,14 @@ function DonatePage() {
         <div className="h-16"></div>
         <div className="flex flex-col items-stretch text-left pt-4 gap-8">
           <div className="flex flex-col gap-4">
-            <h3 className="text-3xl font-bold">How to connect wallet</h3>
+            <h3 className="text-3xl font-bold">How To Donate</h3>
             <ol className="flex flex-col gap-4 list-decimal list-outside pl-8 text-lg">
-              <li>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Architecto provident repudiandae saepe aut velit dolore cum reiciendis dolorem, dolorum fugiat eum, explicabo, beatae possimus consequatur obcaecati perspiciatis deleniti suscipit fugit.</li>
-              <li>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sequi commodi dolor possimus aliquam dignissimos corporis repudiandae aut, ab ducimus autem deleniti dolorem sapiente iusto asperiores veniam eligendi dolore nobis omnis.</li>
-              <li>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus dicta omnis, mollitia minus, aliquam explicabo saepe veritatis eum eveniet voluptate nesciunt architecto repellendus laborum facilis magnam ducimus ullam animi excepturi?</li>
-              <li>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Culpa earum molestias accusantium error voluptas illum ipsam vel, perspiciatis rem magnam, omnis asperiores enim repudiandae doloribus velit rerum, aperiam nulla maxime consequatur officiis. Aliquid iste repellat distinctio odit. Quibusdam sint, et id minus beatae quia, similique, exercitationem voluptatibus alias officiis suscipit?</li>
+              <li>Connect your Metamask wallet to this website.</li>
+              <li>Select one of the donation destinations. (Currently only one destination is available. We are looking for more!)</li>
+              <li>Input the amount of money you want to donate. (It should be more than zero)</li>
+              <li>If you want to mint the NFT as a donation certification, click "Donate with mint”. (In this case, additional gas fee may be charged). If not, click "Donate only".</li>
+              <li>Wait for the donation to complete. (Depending on network condition, it may take up to 15 seconds).</li>
+              <li>When the donation is complete, you can check your donation history on MyPage.</li>
             </ol>
           </div>
           <div className="border-b-2"></div>
@@ -171,7 +174,7 @@ function DonatePage() {
 
       {
         showAlert !== "" &&
-        <div className={`fixed z-50 font-medium duration-500 text-center left-0 right-0 ${showAlert && toast}`}>
+        <div className={`fixed font-medium duration-500 text-center left-0 right-0 ${showAlert && toast}`}>
           <div className="bg-red-300 inline-block py-4 px-24 rounded-2xl">{showAlert}</div>
         </div>
       }

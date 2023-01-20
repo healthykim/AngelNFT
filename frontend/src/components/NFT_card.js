@@ -6,9 +6,12 @@ function NFTCard({ tokenId, isExchangeable, metadata, account, setIsLoading}) {
   const [exchangeable, setExchangeable] = useState(isExchangeable);
 
   const onClickSetExchange = async (tokenId) => {
-    setIsLoading(true);
     try {
-      await AngelTokenContract.methods.setExchangeableToken(tokenId).send({ from: account });
+      await AngelTokenContract
+            .methods
+            .setExchangeableToken(tokenId)
+            .send({ from: account })
+            .on('transactionHash', ()=>{setIsLoading(true)});
       setExchangeable(!exchangeable);
     }
     catch (error) {
@@ -18,9 +21,12 @@ function NFTCard({ tokenId, isExchangeable, metadata, account, setIsLoading}) {
   }
 
   const onClickReSetExchange = async (tokenId) => {
-    setIsLoading(true);
     try {
-      await AngelTokenContract.methods.resetExchangeableToken(tokenId).send({ from: account });
+      await AngelTokenContract
+            .methods
+            .resetExchangeableToken(tokenId)
+            .send({ from: account })
+            .on('transactionHash', ()=>{setIsLoading(true)});
       setExchangeable(!exchangeable);
     }
     catch (error) {

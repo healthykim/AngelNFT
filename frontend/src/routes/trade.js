@@ -67,6 +67,10 @@ function Trade() {
           <div className="text-3xl 2xl:text-5xl pb-8 2xl:pb-12 2xl:pt-4">
             Trade
           </div>
+          The NFTs below are registered by other users for exchange.  <br />
+          By clicking on the desired NFT, you can request an exchange.  <br />
+          Once another user approves the exchange request, NFTs are automatically exchanged.  <br />
+          If you make multiple requests using one NFT, only the last request will be valid. <br />
           <div className="grid grid-cols-5 gap-x-10 gap-y-8 2xl:gap-x-20 2xl:gap-y-16 w-full">
             {
               exchangeableTokens.map((token, i)=> {

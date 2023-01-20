@@ -1,25 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { AngelTokenContract } from "../contracts";
 import XCard from "../components/x_card";
 import { Link } from "react-router-dom";
 
 function MainPage() {
-  const [nextTokenId, setNextTokenId] = useState(-1);
-
-  const getTokenId = async () => {
-    try {
-      const id = await AngelTokenContract.methods.totalSupply().call();
-      setNextTokenId(id);
-    }
-    catch (e) {
-      console.log(e)
-    }
-  }
-
-  useEffect(() => {
-    getTokenId();
-  }, [])
-
 
   const ukWalletAddresses = [
     { 'currency': 'BTC', 'address': '357a3So9CbsNfBBgFYACGvxxS6tMaDoa1P' },
@@ -35,22 +18,24 @@ function MainPage() {
           </h1>
         </div>
       </div>
-      <p className="text-center">nextTokenId: {nextTokenId}</p>
       <div className="px-24 xl:px-48">
         <div className="text-center flex-wrap py-16 text-2xl w-10/12 xl:w-8/12 m-auto">
-          <p className="inline-block pr-1">Russia's invasion of Ukraine is protracted.</p>
-          <p className="inline-block pr-1">To continue our interest and support in Ukraine,</p>
-          <p className="inline-block pr-1">I would like to introduce some cryptocurrency donors.</p>
-          <p className="inline-block pr-1">And to promote donations, we would like to provide services such as issuing commemorative NFTs or tracking donation details.</p>
+          <p className="inline-block pr-1">Ukraine needs our help.</p>
+          <p className="inline-block pr-1">It has been almost a year now since the Russian invasion of Ukraine, which is still prolonging.</p>
+          <p className="inline-block pr-1">We would like to introduce few cryptocurrency donors in order to maintain the interest and support for Ukraine.</p>
+          <p className="inline-block pr-1">And, to promote these donations, we are providing services such as commemorative NFT issuance (as donation certification) or tracking donation history.</p>        
         </div>
+
+        
         <div className="border-b-2"></div>
         <div className="grid gap-y-10 py-16">
           <div>
-            <h3 className="text-3xl font-bold">Ways of Donation</h3>
+            <h3 className="text-3xl font-bold">Donation Methods:</h3>
             <p className="pl-8 pt-4 text-lg">
-              You can use this site to send money to donors. <br />
-              You can choose one of the addresses on the <Link to="/donate" className="text-ukblue text-lg">Donate page</Link> and send the money. <br />
-              Or you can donate cryptocurrency directly to the donation addresses introduced below. <br />
+              1. You can donate cryptocurrency directly to the donation addresses introduced below. (See below) <br />
+              2. Alternatively, you can use this website to make donations.<br /><br />
+              For a second method, you just need to select one of the addresses on <Link to="/donate" className="text-ukblue text-lg">Donate page</Link> and send the money.<br />
+              Check the details below on where to donate.< br/>
             </p>
           </div>
           <div>
@@ -62,23 +47,25 @@ function MainPage() {
                 );
               })}
             </ul>
+            (At the moment, we are looking for more wallet addresses for donations)<br />
           </div>
         </div>
         <div className="border-b-2"></div>
         <div className="flex flex-col gap-8 py-16 text-lg">
-          <XCard>
-            If you make a donation through this site, you can check your donation history. <br />
-            Your donation will be stored forever in the blockchain. <br />
-            However, since you cannot identify who the owner of the wallet address is, your identity is not revealed. <br />
+          <XCard imgSrc="main_images/1.png">
+            By donating money through this website, you can keep track of your donation history. <br />
+            Your donation details are stored forever in the blockchain. <br />
+            However, since it  cannot be verified who the owner of the wallet address is, your identity is not revealed. <br />
           </XCard>
-          <XCard imgPosi='right'>
-            In addition, we will issue the following commemorative NFTs <br />
-            (additional minting costs may be incurred.) <br />
-            NFT images do not overlap each other and vary depending on hair appearance, clothing, skin color, etc. <br />
+          <XCard imgPosi='right' imgSrc="main_images/2.png">
+            Also, the following commemorative NFT(s) will be issued as certification(s) of donation. <br />
+            (Additioinal gas fee may be charged when minting the NFT. You can donate without minting.) <br />
+            NFT images are unique and do not repeat each other. <br />
+            They will vary depending on hairstyle, clothes, skin color, etc. <br />
           </XCard>
-          <XCard>
-            The issued NFT is completely yours. <br />
-            You can import it into your wallet or exchange it for an NFT in another image here. <br />
+          <XCard  imgSrc="main_images/3.png">
+            The minted NFT completely belongs to a user. <br />
+            It can be imported into the Metamask wallet or can be exchanged for another NFT here. <br />
           </XCard>
 
         </div>
@@ -92,8 +79,16 @@ function MainPage() {
         <div className="border-b-2"></div>
         <div className="py-8">
           <h4 className="text-xl font-semibold">Contact Us</h4>
+          If you want to register your donations on this website or have other questions, please Contact Us.<br />
           <p className="pt-2">
-            Please contact [Contact Us] if you want to register your donation destination on our website.
+            <p className="font-semibold">Boseol Mun (@healthykim)</p>
+            Director, Smart contract and Frontend developer, NFT Image creator <br />
+            email: bsbs8645@snu.ac.kr <br />
+            <p className="font-semibold">Joongyu Han (@joongyuhan)</p>
+            Frontend developer, Designer. <br />
+            email:  <br />
+            <p className="font-semibold">Special Thanks to</p>
+            Ha Tanya (Translation)<br />
           </p>
         </div>
         <div className="h-12">

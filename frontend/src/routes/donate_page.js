@@ -60,7 +60,7 @@ function DonatePage() {
       return;
     }
     let floatRegex = /^(\d+\.\d+|\d+)$/;
-    if(!floatRegex.test(ETH) || parseFloat(ETH) === 0){
+    if(!floatRegex.test(ETH)){
       // 혹시나 소수점 자리 제한이 있다면 위에 floatRegex를 적절하게 바꾸면 됩니다....
       // 그리고 다른 Alert를 띄우시면 될 듯.
       // 지금은 1.45 이나 1231과 같은 정규식입니다.

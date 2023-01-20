@@ -8,6 +8,7 @@ function Trade() {
   const [account, setAccount] = useState();
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showLoadingText, setShowLoadingText] = useState(false);
   const [selectedTokenId, setSelectedTokenId] = useState();
   const [exchangeableTokens, setExchangeableTokens] = useState([]);
 
@@ -92,8 +93,8 @@ function Trade() {
           </div>
         </div>
       </div>
-      {showModal && <ChooseNFTModal setShowModal={setShowModal} toTokenId={selectedTokenId} account={account} setIsLoading={setIsLoading} />}
-      {isLoading && <LoadingModal></LoadingModal>}
+      {showModal && <ChooseNFTModal setShowModal={setShowModal} toTokenId={selectedTokenId} account={account} setIsLoading={setIsLoading} setShowLoadingText={setShowLoadingText}/>}
+      {isLoading && <LoadingModal showLoadingText={showLoadingText}></LoadingModal>}
     </div>
   );
 }

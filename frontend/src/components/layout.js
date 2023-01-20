@@ -13,8 +13,7 @@ function Layout({ children }) {
             <Link to="/trade" className="text-black mr-4">Trade</Link>
           </div>
           <Link to="/my_page/my_nft" className="flex items-center">
-            <div className='w-10 h-10 rounded-full bg-black'>
-            </div>
+            <img className="w-10 h-10 rounded-full" src='layout_images/profile.png' alt=""/>
           </Link>
         </nav>
       </div>

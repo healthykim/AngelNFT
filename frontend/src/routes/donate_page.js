@@ -21,6 +21,12 @@ function DonatePage() {
   const [ETH, setETH] = useState("");
 
   useEffect(() => {
+    if(window.ethereum) {
+      window.ethereum.on("accountsChanged", () => {
+        window.location.reload();
+      });
+    }
+    
     getAccount();
     getDestinations();
   }, []);

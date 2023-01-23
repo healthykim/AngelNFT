@@ -1,32 +1,8 @@
-import React, { useEffect, useState } from "react"
-import { web3, DonateContract } from "../../contracts";
+import React from "react"
 import { Link } from "react-router-dom";
 
-function MyHistory({ account }) {
-  const [donateHistories, setDoateHistories] = useState([]);
+function MyHistory({ donateHistories }) {
 
-  const getDonateHistory = async () => {
-    try {
-      if (account) {
-        const histories = await DonateContract.methods.getDonateHistory(account).call();
-        const tmpArr = histories.map((history) => {
-          let time = new Date(history.timeStamp * 1000);
-          let dateString = time.toISOString().slice(0, 10);
-          let formattedDate = dateString.replace(/-/g, ".");
-          return ({ timeStamp: formattedDate, amount: web3.utils.fromWei(history.amount, "ether") + " ETH", destinationId: history.destinationName });
-        });
-        tmpArr.reverse();
-        setDoateHistories(tmpArr);
-      }
-    }
-    catch (error) {
-      console.log(error);
-    }
-  }
-
-  useEffect(() => {
-    getDonateHistory();
-  }, [account])
 
   if (donateHistories.length === 0) {
     return (

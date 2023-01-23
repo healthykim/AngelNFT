@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useState } from 'react';
-import { AngelTokenContract } from "../../contracts";
+import { AngelTokenContract, DonateContract, web3 } from "../../contracts";
 import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import MyRequest from "./my_request";
 import MyHistory from "./my_history";
@@ -11,6 +11,7 @@ import LoadingModal from "../../components/modal/loading_modal";
 function MyPage() {
   const [account, setAccount] = useState('Loading...');
   const [tokenIds, setTokenIds] = useState([]);
+  const [donateHistories, setDoateHistories] = useState([]);
   const [tab, setTab] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [showLoadingText, setShowLoadingText] = useState(false);
@@ -35,15 +36,29 @@ function MyPage() {
   }
 
   const getAccount = async () => {
+    setIsLoading(true);
     try {
       if (window.ethereum) {
+        //get account
         let accounts = await window.ethereum.request({
           method: 'eth_requestAccounts',
         });
         setAccount(accounts[0]);
-        let tmpArr = await AngelTokenContract.methods.getTokenDataOfOwner(accounts[0]).call();
-        console.log(tmpArr);
-        setTokenIds(tmpArr);
+
+        //get token Id
+        let tmpIds = await AngelTokenContract.methods.getTokenDataOfOwner(accounts[0]).call();
+        setTokenIds(tmpIds);
+
+        //get history
+        let histories = await DonateContract.methods.getDonateHistory(accounts[0]).call();
+        let tmpHistories = histories.map((history) => {
+          let time = new Date(history.timeStamp * 1000);
+          let dateString = time.toISOString().slice(0, 10);
+          let formattedDate = dateString.replace(/-/g, ".");
+          return ({ timeStamp: formattedDate, amount: web3.utils.fromWei(history.amount, "ether") + " ETH", destinationId: history.destinationName });
+        });
+        tmpHistories.reverse();
+        setDoateHistories(tmpHistories);
       }
       else {
         alert("Install Metamask!");
@@ -52,6 +67,7 @@ function MyPage() {
     catch (error) {
       console.error(error);
     }
+    setIsLoading(false);
   }
 
   useEffect(() => {
@@ -61,7 +77,7 @@ function MyPage() {
       });
     }
     getAccount();
-  }, [isLoading])
+  }, [])
 
   return (
     <div>
@@ -88,11 +104,13 @@ function MyPage() {
             <p className="py-2 invisible">Donate History</p>
           </button>
         </div>
-        <Routes>
-          <Route path="my_nft" element={<MyNFT tokenIds={tokenIds} account={account} setIsLoading={setIsLoading} setShowLoadingText={setShowLoadingText}></MyNFT>}></Route>
-          <Route path="exchange_nft" element={<MyRequest tokenIds={tokenIds} account={account} setIsLoading={setIsLoading} setShowLoadingText={setShowLoadingText} onClickTab0={()=>{onClickTab(0)}}></MyRequest>}></Route>
-          <Route path="donate_history" element={<MyHistory account={account}></MyHistory>}></Route>
-        </Routes>
+        { !isLoading &&
+          <Routes>
+            <Route path="my_nft" element={<MyNFT tokenIds={tokenIds} account={account} setIsLoading={setIsLoading} setShowLoadingText={setShowLoadingText}></MyNFT>}></Route>
+            <Route path="exchange_nft" element={<MyRequest tokenIds={tokenIds} account={account} setIsLoading={setIsLoading} setShowLoadingText={setShowLoadingText} onClickTab0={()=>{onClickTab(0)}}></MyRequest>}></Route>
+            <Route path="donate_history" element={<MyHistory donateHistories={donateHistories}></MyHistory>}></Route>
+          </Routes>
+        }
       </div>
       {isLoading && <LoadingModal showLoadingText={showLoadingText}></LoadingModal>}
     </div>

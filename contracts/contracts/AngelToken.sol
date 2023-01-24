@@ -10,7 +10,7 @@ contract AngelToken is ERC721Enumerable, Ownable {
     
     constructor() ERC721("InternetAngel", "IA") {}
     uint16 constant totalTokens = 600;
-    string metadataBaseUri = "https://gateway.ipfs.io/ipfs/bafybeiczuoy2mwlkyk67ru4jmm2hike4vevvl3k56isdzhkwyhweglygpi/metadata/";
+    string metadataBaseUri = "ipfs://bafybeihttemaywidv6xmszptaelvikt7infpp6r4zux7jqg3vz3rh4n4ly/metadata/";
 
     /** 
      * Usage

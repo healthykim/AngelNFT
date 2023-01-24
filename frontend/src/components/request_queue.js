@@ -53,7 +53,8 @@ function RequestQueue({ tokenId, account, setIsLoading, setShowLoadingText }) {
                   key={i}
                   className="h-5/6 rounded-md hover:h-full transition-all duration-300 cursor-pointer"
                   onClick={() => { onClickExchange(requestId[0]) }}
-                  src={`https://gateway.ipfs.io/ipfs/${ipfsImageHash}/images/${requestId[0]}.png`}
+                  src={`https://gateway.pinata.cloud/ipfs/${ipfsImageHash}/images/${requestId[0]}.png`}
+                  alt=""
                 />
               )
             })}

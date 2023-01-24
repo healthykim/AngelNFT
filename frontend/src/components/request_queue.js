@@ -40,7 +40,7 @@ function RequestQueue({ tokenId, account, setIsLoading, setShowLoadingText }) {
   }, [])
 
   return (
-    <div className="flex flex-col justify-end ml-8">
+    <div className="h-full flex flex-col justify-end ml-8">
       <div className="text-lg mb-2">
         {requestIds.length !== 0 ? "Exchange Requests" : "There is no exchange requests yet."}
       </div>

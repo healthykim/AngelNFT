@@ -3,7 +3,7 @@ import NFTCard from "../../components/NFT_card";
 import RequestQueue from "../../components/request_queue";
 import { Link } from "react-router-dom";
 
-function MyRequest({ tokenIds, account, setIsLoading, onClickTab0, setShowLoadingText}) {
+function MyRequest({ tokenIds, account, setIsLoading, onClickTab0, setShowLoadingText }) {
 
   if (tokenIds.length === 0) {
     return (
@@ -22,11 +22,13 @@ function MyRequest({ tokenIds, account, setIsLoading, onClickTab0, setShowLoadin
           tokenIds.map((tokenId, i) => {
             if (tokenId[2]) {
               return (
-                <div className="flex flex-row" key={i}>
-                  <div>
-                    <NFTCard tokenId={tokenId[0]} metadata={tokenId[1]} isExchangeable={tokenId[2]} account={account} textPosi='bottom' setIsLoading={setIsLoading} setShowLoadingText={setShowLoadingText}/>
+                <div className="flex flex-row h-[296px]" key={i}>
+                  <div className="h-full flex-none w-64">
+                    <NFTCard tokenId={tokenId[0]} metadata={tokenId[1]} isExchangeable={tokenId[2]} account={account} textPosi='bottom' setIsLoading={setIsLoading} setShowLoadingText={setShowLoadingText} />
                   </div>
-                  <RequestQueue tokenId={tokenId[0]} account={account} setIsLoading={setIsLoading} setShowLoadingText={setShowLoadingText}/>
+                  <div className="h-full flex-1">
+                    <RequestQueue tokenId={tokenId[0]} account={account} setIsLoading={setIsLoading} setShowLoadingText={setShowLoadingText} />
+                  </div>
                 </div>
               );
             }

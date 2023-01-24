@@ -1,7 +1,7 @@
 import Web3 from 'web3';
 
-export const AngelTokenContractAddress = "0x09263d2B3401C694c000F5dC8068B59ffbaD2796";
-export const DonateContractAddress = "0x62CbaC93af820d4cCc242615B98acf123CF2fD56";
+export const AngelTokenContractAddress = "0x8aae78586A0a29383Eda7cE66A8980186d3dE08B";
+export const DonateContractAddress = "0xDf2eFb96D875347E0c9c6c67B444c47c065A4AAA";
 
 const AngelTokenContractAbi = [
   {
@@ -1102,6 +1102,6 @@ export const DonateContract = new web3.eth.Contract(
   DonateContractAddress,
 );
 
-export const ipfsImageHash = "bafybeidnrgqxutekuvycwirabsfesgfbn2t5daqcty7h7rx7t4fno7577u"
-export const jsonHash = "bafybeiczuoy2mwlkyk67ru4jmm2hike4vevvl3k56isdzhkwyhweglygpi"
+export const ipfsImageHash = "bafybeiak4s4xnrbyomysij7fiwgx4mpzua7d6tk2rhbahq76s2vh4bomxq"
+export const jsonHash = "bafybeihttemaywidv6xmszptaelvikt7infpp6r4zux7jqg3vz3rh4n4ly"
 ///TODO : 연결방법 다른것도 있는지 찾아보기

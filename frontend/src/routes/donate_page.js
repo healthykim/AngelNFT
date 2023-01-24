@@ -50,8 +50,8 @@ function DonatePage() {
 
   const getDestinations = async () => {
     try {
-      let destinations = await DonateContract.methods.getDestinations().call();
-      setDestinations(destinations);
+      let dest = await DonateContract.methods.getDestinations().call();
+      setDestinations(dest);
     } catch (error) {
       console.error(error);
     }

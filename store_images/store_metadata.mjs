@@ -21,7 +21,7 @@ async function main() {
         const metadata = {
             "name": `Angel ${fileName}`,
             "description": "Angel NFT",
-            "image": `https://gateway.ipfs.io/ipfs/bafybeidnrgqxutekuvycwirabsfesgfbn2t5daqcty7h7rx7t4fno7577u/images/${fileFullName}`
+            "image": `https://gateway.pinata.cloud/ipfs/bafybeiak4s4xnrbyomysij7fiwgx4mpzua7d6tk2rhbahq76s2vh4bomxq/images/${fileFullName}`
         }
         fs.writeFile(`${metadataDir}/${fileName}.json`, JSON.stringify(metadata), function(error){if(error){console.log(error)}});
     })

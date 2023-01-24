@@ -19,7 +19,7 @@ describe("AngelToken", function() {
     let angelToken: AngelToken;
     //let mockedAngelToken: MockedAngelToken;
     let accounts: Signer[]; // [0] is owner
-    let baseUri = "https://gateway.ipfs.io/ipfs/bafybeiczuoy2mwlkyk67ru4jmm2hike4vevvl3k56isdzhkwyhweglygpi/metadata";
+    let baseUri = "ipfs://bafybeihttemaywidv6xmszptaelvikt7infpp6r4zux7jqg3vz3rh4n4ly/metadata";
 
     beforeEach(async () => {
         const AngelToken = await ethers.getContractFactory("AngelToken");

@@ -85,9 +85,10 @@ function Trade() {
                 return (
                   <img
                     key={i}
-                    src={`https://gateway.ipfs.io/ipfs/${ipfsImageHash}/images/${token.tokenId}.png`}
+                    src={`https://gateway.pinata.cloud/ipfs/${ipfsImageHash}/images/${token.tokenId}.png`}
                     className="rounded-lg 2xl:rounded-2xl cursor-pointer w-full"
-                    onClick={() => { onClickImage(token.tokenId); }}>
+                    onClick={() => { onClickImage(token.tokenId); }}
+                    alt="">
                   </img>
                 )
               })

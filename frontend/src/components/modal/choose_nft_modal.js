@@ -74,7 +74,7 @@ function ChooseNFTModal({ setShowModal, toTokenId, account, setIsLoading, setSho
             tokenOfOwner.map((token, i) => {
               return (
                 !token.exchangeable &&
-                <img key={i} onClick={()=>{onClickImage(token.tokenId)}} className="h-4/6 rounded-md cursor-pointer" src={`https://gateway.ipfs.io/ipfs/${ipfsImageHash}/images/${token.tokenId}.png`} />
+                <img key={i} onClick={()=>{onClickImage(token.tokenId)}} className="h-4/6 rounded-md cursor-pointer" src={`https://gateway.pinata.cloud/ipfs/${ipfsImageHash}/images/${token.tokenId}.png`} alt=""/>
               );
             })
           }

@@ -63,7 +63,7 @@ function MintModal({ setShowMintModal, tokenId }) {
             </div>
           </div>
           <div className={`p-2 overflow-clip`} >
-            <img className="h-full w-full object-contain rounded-lg duration-1000 transition-all ease-out" style={imgHero} src={`https://gateway.ipfs.io/ipfs/${ipfsImageHash}/images/${tokenId}.png`} alt={'mint image'} ref={imgRef}></img>
+            <img className="h-full w-full object-contain rounded-lg duration-1000 transition-all ease-out" style={imgHero} src={`https://gateway.pinata.cloud/ipfs/${ipfsImageHash}/images/${tokenId}.png`} alt={'mint image'} ref={imgRef}></img>
           </div>
         </div>
       </div>

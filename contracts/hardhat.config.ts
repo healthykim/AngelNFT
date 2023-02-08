@@ -25,8 +25,8 @@ const config: HardhatUserConfig = {
   },
   networks: {
     goerli: {
-      url: `https://eth-goerli.alchemyapi.io/v2/rkGCoetVrGUD3bVzI4JAvK8MahPmbj0x`,
-      accounts: ['6df173a0377142a373a474151da2e848e23afb9db170973b54ea8bccbbc0af96'],
+      url: ``,
+      accounts: [''],
     }
     
   }
